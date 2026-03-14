@@ -45,6 +45,10 @@ export async function queryDataSourcePages(
 
   return notion.dataSources.query({
     data_source_id: dataSourceId,
+    sorts: [
+      { property: 'Pinned', direction: 'descending' },
+      { property: 'CreatedTime', direction: 'descending' },
+    ],
     page_size: pageSize,
     result_type: 'page',
   })

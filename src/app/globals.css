@@ -106,3 +106,7 @@ body {
 .card-shadow {
   box-shadow: 0 2px 4px 0 rgba(21, 21, 21, 0.06);
 }
+
+.menu-shadow {
+  box-shadow: 0 6px 14px 0 rgba(34, 38, 39, 0.1);
+}
