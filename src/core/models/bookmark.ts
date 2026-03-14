@@ -4,6 +4,7 @@ export type Bookmark = {
   url: string
   favicon?: string
   description?: string
+  domain: string
   tags: string[]
   pinned: boolean
   isArchived: boolean

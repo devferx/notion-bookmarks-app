@@ -1,5 +1,11 @@
 import { Bookmark } from '@/core/models/bookmark'
-import { isNotionPageRow, joinPlainText, toFaviconUrl } from '@/core/utils'
+import {
+  isNotionPageRow,
+  joinPlainText,
+  normalizeUrl,
+  toDomain,
+  toFaviconUrl,
+} from '@/core/utils'
 
 interface NotionRowsResult {
   results?: unknown[]
@@ -12,10 +18,12 @@ export function adaptNotionRowsToBookmarks(rows: NotionRowsResult): Bookmark[] {
     const props = row.properties
 
     const title = joinPlainText(props.Title?.title) || 'Untitled'
-    const url = props.URL?.url ?? ''
+    const rawUrl = props.URL?.url ?? ''
+    const url = normalizeUrl(rawUrl) ?? rawUrl
+    const domain = toDomain(rawUrl) ?? ''
     const description = joinPlainText(props.Description?.rich_text) || undefined
     const tags = (props.Tags?.multi_select ?? [])
-      .map((tag) => tag.name ?? '')
+      .map((tag: { name?: string }) => tag.name ?? '')
       .filter(Boolean)
     const pinned = props.Pinned?.checkbox === true
     const isArchived =
@@ -23,13 +31,14 @@ export function adaptNotionRowsToBookmarks(rows: NotionRowsResult): Bookmark[] {
       row.archived === true ||
       row.in_trash === true
     const visitCount = props.VisitCount?.number ?? 0
-    const createdAt = props['Created time']?.created_time ?? row.created_time
+    const createdAt = props.CreatedTime?.created_time ?? row.created_time
     const lastVisited = props.LastVisited?.date?.start ?? null
 
     return {
       id: row.id,
       title,
       url,
+      domain,
       favicon: url ? toFaviconUrl(url) : undefined,
       description,
       tags,
