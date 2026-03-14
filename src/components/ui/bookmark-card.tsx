@@ -14,6 +14,8 @@ import {
 } from '@/components/icons'
 import { useMenuActions } from '@/hooks/use-menu-actions'
 import { trackBookmarkVisit } from '@/actions/bookmark'
+import { Copy } from '../icons/copy'
+import { toast } from 'sonner'
 
 type Props = {
   bookmark: Bookmark
@@ -49,6 +51,17 @@ export const BookmarkCard = ({ bookmark }: Props) => {
     } finally {
       closeMenu()
     }
+  }
+
+  const onCopyLink = () => {
+    navigator.clipboard.writeText(bookmark.url)
+    toast('Link copied to clipboard.', {
+      icon: <Copy size={16} />,
+      classNames: {
+        title: 'text-preset-4-medium text-neutral-900',
+      },
+    })
+    closeMenu()
   }
 
   return (
@@ -100,6 +113,16 @@ export const BookmarkCard = ({ bookmark }: Props) => {
               >
                 <LinkExternal size={16} />
                 <span className="text-preset-4 text-neutral-800">Visit</span>
+              </button>
+
+              <button
+                className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100"
+                type="button"
+                role="menuitem"
+                onClick={onCopyLink}
+              >
+                <Copy size={16} />
+                <span className="text-preset-4 text-neutral-800">Copy URL</span>
               </button>
             </div>
           )}

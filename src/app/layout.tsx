@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
 import './globals.css'
+import { Toaster } from 'sonner'
 
 const manrope = Manrope({
   variable: '--font-manrope',
@@ -19,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${manrope.variable} not-dark`}>{children}</body>
+      <body className={`${manrope.variable} not-dark`}>
+        {children}
+        <Toaster position="top-right" />
+      </body>
     </html>
   )
 }
