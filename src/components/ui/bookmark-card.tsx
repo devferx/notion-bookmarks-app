@@ -12,18 +12,22 @@ import {
   Pin,
   LinkExternal,
 } from '@/components/icons'
-import { useState } from 'react'
+import { useMenuActions } from '@/hooks/use-menu-actions'
 
 type Props = {
   bookmark: Bookmark
 }
 
 export const BookmarkCard = ({ bookmark }: Props) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-  const onToggleMenu = () => {
-    setIsMenuOpen((prev) => !prev)
-  }
+  const {
+    isMenuOpen,
+    menuContainerRef,
+    menuId,
+    menuItemRef,
+    menuTriggerRef,
+    closeMenu,
+    onToggleMenu,
+  } = useMenuActions()
 
   const onOpenLink = () => {
     try {
@@ -40,7 +44,7 @@ export const BookmarkCard = ({ bookmark }: Props) => {
     } catch {
       // Ignore invalid URLs
     } finally {
-      setIsMenuOpen(false)
+      closeMenu()
     }
   }
 
@@ -63,18 +67,32 @@ export const BookmarkCard = ({ bookmark }: Props) => {
 
         <div className="flex-1" />
 
-        <div className="relative">
+        <div className="relative" ref={menuContainerRef}>
           <button
             className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-neutral-400 transition-colors duration-300 hover:bg-neutral-200"
+            ref={menuTriggerRef}
+            type="button"
+            aria-label={`Open actions for ${bookmark.title}`}
+            aria-haspopup="menu"
+            aria-expanded={isMenuOpen}
+            aria-controls={menuId}
             onClick={onToggleMenu}
           >
             <DotsVertical />
           </button>
 
           {isMenuOpen && (
-            <div className="bg-neutral-0 menu-shadow absolute top-full right-0 mt-1.5 flex w-50 flex-col overflow-hidden rounded-lg border border-neutral-100 p-2">
+            <div
+              className="bg-neutral-0 menu-shadow absolute top-full right-0 mt-1.5 flex w-50 flex-col overflow-hidden rounded-lg border border-neutral-100 p-2"
+              id={menuId}
+              role="menu"
+              aria-label={`Actions for ${bookmark.title}`}
+            >
               <button
                 className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100"
+                ref={menuItemRef}
+                type="button"
+                role="menuitem"
                 onClick={onOpenLink}
               >
                 <LinkExternal size={16} />
