@@ -3,6 +3,7 @@ import type { Bookmark } from '@/core/models/bookmark'
 import {
   getPrimaryDataSourceId,
   queryDataSourcePages,
+  registerBookmarkVisit,
 } from '@/core/services/notion.service'
 
 export async function getBookmarks(): Promise<Bookmark[]> {
@@ -16,4 +17,12 @@ export async function getBookmarks(): Promise<Bookmark[]> {
   const rows = await queryDataSourcePages(dataSourceId)
 
   return adaptNotionRowsToBookmarks(rows)
+}
+
+export async function trackBookmarkVisit(bookmarkId: string): Promise<void> {
+  if (!bookmarkId) {
+    throw new Error('Missing bookmark id')
+  }
+
+  await registerBookmarkVisit(bookmarkId)
 }

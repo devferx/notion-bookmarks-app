@@ -9,10 +9,11 @@ import {
   Clock,
   DotsVertical,
   Eye,
-  Pin,
   LinkExternal,
+  Pin,
 } from '@/components/icons'
 import { useMenuActions } from '@/hooks/use-menu-actions'
+import { trackBookmarkVisit } from '@/actions/bookmark'
 
 type Props = {
   bookmark: Bookmark
@@ -37,6 +38,8 @@ export const BookmarkCard = ({ bookmark }: Props) => {
         '_blank',
         'noopener,noreferrer',
       )
+
+      void trackBookmarkVisit(bookmark.id)
 
       if (newWindow) {
         newWindow.opener = null

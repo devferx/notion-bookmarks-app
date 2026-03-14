@@ -1,4 +1,5 @@
 import { Client } from '@notionhq/client'
+import { toLocalDateString } from '@/core/utils/date'
 
 const notion = new Client({
   auth: process.env.NOTION_API_KEY,
@@ -51,5 +52,38 @@ export async function queryDataSourcePages(
     ],
     page_size: pageSize,
     result_type: 'page',
+  })
+}
+
+export async function registerBookmarkVisit(pageId: string): Promise<void> {
+  getRequiredNotionApiKey()
+
+  const page = await notion.pages.retrieve({
+    page_id: pageId,
+  })
+
+  if (!('properties' in page)) {
+    throw new Error(`Page ${pageId} has no properties to update.`)
+  }
+
+  const visitCountProperty = page.properties.VisitCount
+  const currentVisitCount =
+    visitCountProperty?.type === 'number' &&
+    typeof visitCountProperty.number === 'number'
+      ? visitCountProperty.number
+      : 0
+
+  await notion.pages.update({
+    page_id: pageId,
+    properties: {
+      VisitCount: {
+        number: currentVisitCount + 1,
+      },
+      LastVisited: {
+        date: {
+          start: toLocalDateString(new Date()),
+        },
+      },
+    },
   })
 }
