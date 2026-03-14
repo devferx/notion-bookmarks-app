@@ -12,7 +12,7 @@ export default async function Home() {
           <h2 className="text-preset-1 text-neutral-900">All bookmarks</h2>
         </header>
 
-        <div className="mt-5 flex flex-col gap-4">
+        <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           {bookmarks.map((bookmark) => (
             <BookmarkCard key={bookmark.id} bookmark={bookmark} />
           ))}
