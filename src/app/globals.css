@@ -1,21 +1,51 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --neutral-0: #ffffff;
+  --neutral-100: #e8f0ef;
+  --neutral-300: #dde9e7;
+  --neutral-400: #c0cfcc;
+  --neutral-500: #899492;
+  --neutral-600: #5c6b68;
+  --neutral-800: #4c5c59;
+  --neutral-900: #051513;
+
+  --teal-700: #014745;
+  --teal-800: #013c3b;
+
+  --red-600: #fd4740;
+  --red-800: #cb0a04;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+  --font-manrope: var(--font-manrope);
+
+  --color-neutral-0: var(--neutral-0);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
+
+  --color-teal-700: var(--teal-700);
+  --color-teal-800: var(--teal-800);
+
+  --color-red-600: var(--red-600);
+  --color-red-800: var(--red-800);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* --neutral-0: #ffffff;
+    --neutral-100: #b1b9b9;
+    --neutral-300: #00706e;
+    --neutral-400: #004746;
+    --neutral-500: #004241;
+    --neutral-600: #002e2d;
+    --neutral-800: #001f1f;
+    --neutral-900: #001414; */
   }
 }
 
@@ -23,4 +53,56 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.text-preset-1 {
+  font-size: 24px;
+  line-height: 140%;
+}
+
+.text-preset-2 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 120%;
+}
+
+.text-preset-2-semi-bold {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 120%;
+}
+
+.text-preset-3 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 140%;
+}
+
+.text-preset-3-medium {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 130%;
+}
+
+.text-preset-4 {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 140%;
+}
+
+.text-preset-4-medium {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: 0.14px;
+}
+
+.text-preset-5 {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
+}
+
+.card-shadow {
+  box-shadow: 0 2px 4px 0 rgba(21, 21, 21, 0.06);
 }
