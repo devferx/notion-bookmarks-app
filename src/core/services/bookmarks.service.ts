@@ -1,10 +1,9 @@
-import { adaptNotionRowsToBookmarks } from '@/adapters'
-import { Bookmark } from '@/models/bookmark'
-
+import { adaptNotionRowsToBookmarks } from '@/core/adapters'
+import type { Bookmark } from '@/core/models/bookmark'
 import {
   getPrimaryDataSourceId,
   queryDataSourcePages,
-} from '@/services/notion.service'
+} from '@/core/services/notion.service'
 
 export async function getBookmarks(): Promise<Bookmark[]> {
   const databaseId = process.env.NOTION_DATABASE_ID

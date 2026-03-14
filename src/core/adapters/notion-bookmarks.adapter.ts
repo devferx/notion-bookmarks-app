@@ -1,5 +1,5 @@
-import { Bookmark } from '@/models/bookmark'
-import { isNotionPageRow, joinPlainText, toFaviconUrl } from '@/utils'
+import { Bookmark } from '@/core/models/bookmark'
+import { isNotionPageRow, joinPlainText, toFaviconUrl } from '@/core/utils'
 
 interface NotionRowsResult {
   results?: unknown[]
