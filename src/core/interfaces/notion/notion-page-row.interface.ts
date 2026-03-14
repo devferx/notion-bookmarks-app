@@ -1,4 +1,4 @@
-import { NotionPropertyValue } from '@/interfaces/notion/notion-property-value.interface'
+import { NotionPropertyValue } from './notion-property-value.interface'
 
 export interface NotionPageRow {
   object: 'page'
