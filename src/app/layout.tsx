@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${manrope.variable} not-dark`}>
+      <body className={`${manrope.variable} dark`}>
         {children}
         <Toaster position="top-right" />
       </body>
