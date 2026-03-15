@@ -71,19 +71,51 @@ export const BookmarkCard = ({ bookmark }: Props) => {
   }
 
   const onPinBookmark = () => {
+    const previousPinned = isPinned
+
     startTransition(() => {
       setOptimisticPinned(true)
     })
-    void setBookmarkPin(bookmark.id, true)
-    closeMenu()
+
+    setBookmarkPin(bookmark.id, true)
+      .catch(() => {
+        startTransition(() => {
+          setOptimisticPinned(previousPinned)
+        })
+        toast('Failed to pin bookmark. Please try again.', {
+          icon: <Pin size={16} />,
+          classNames: {
+            title: 'text-preset-4-medium text-neutral-900',
+          },
+        })
+      })
+      .finally(() => {
+        closeMenu()
+      })
   }
 
   const onUnpinBookmark = () => {
+    const previousPinned = isPinned
+
     startTransition(() => {
       setOptimisticPinned(false)
     })
-    void setBookmarkPin(bookmark.id, false)
-    closeMenu()
+
+    setBookmarkPin(bookmark.id, false)
+      .catch(() => {
+        startTransition(() => {
+          setOptimisticPinned(previousPinned)
+        })
+        toast('Failed to unpin bookmark. Please try again.', {
+          icon: <Unpin size={16} />,
+          classNames: {
+            title: 'text-preset-4-medium text-neutral-900',
+          },
+        })
+      })
+      .finally(() => {
+        closeMenu()
+      })
   }
 
   return (
