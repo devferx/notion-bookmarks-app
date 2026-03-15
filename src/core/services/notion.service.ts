@@ -87,3 +87,17 @@ export async function registerBookmarkVisit(pageId: string): Promise<void> {
     },
   })
 }
+
+export async function setBookmarkPin(
+  pageId: string,
+  isPinned: boolean,
+): Promise<void> {
+  await notion.pages.update({
+    page_id: pageId,
+    properties: {
+      Pinned: {
+        checkbox: isPinned,
+      },
+    },
+  })
+}

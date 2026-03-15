@@ -1,27 +1,33 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
+import { startTransition, useOptimistic } from 'react'
+import { toast } from 'sonner'
+
 import type { Bookmark } from '@/core/models/bookmark'
 import { formatBookmarkDate } from '@/core/utils'
 
+import { setBookmarkPin, trackBookmarkVisit } from '@/actions/bookmark'
 import {
   Calendar,
   Clock,
+  Copy,
   DotsVertical,
   Eye,
   LinkExternal,
   Pin,
+  Unpin,
 } from '@/components/icons'
+
 import { useMenuActions } from '@/hooks/use-menu-actions'
-import { trackBookmarkVisit } from '@/actions/bookmark'
-import { Copy } from '../icons/copy'
-import { toast } from 'sonner'
 
 type Props = {
   bookmark: Bookmark
 }
 
 export const BookmarkCard = ({ bookmark }: Props) => {
+  const [isPinned, setOptimisticPinned] = useOptimistic(bookmark.pinned)
+
   const {
     isMenuOpen,
     menuContainerRef,
@@ -62,6 +68,54 @@ export const BookmarkCard = ({ bookmark }: Props) => {
       },
     })
     closeMenu()
+  }
+
+  const onPinBookmark = () => {
+    const previousPinned = isPinned
+
+    startTransition(() => {
+      setOptimisticPinned(true)
+    })
+
+    setBookmarkPin(bookmark.id, true)
+      .catch(() => {
+        startTransition(() => {
+          setOptimisticPinned(previousPinned)
+        })
+        toast('Failed to pin bookmark. Please try again.', {
+          icon: <Pin size={16} />,
+          classNames: {
+            title: 'text-preset-4-medium text-neutral-900',
+          },
+        })
+      })
+      .finally(() => {
+        closeMenu()
+      })
+  }
+
+  const onUnpinBookmark = () => {
+    const previousPinned = isPinned
+
+    startTransition(() => {
+      setOptimisticPinned(false)
+    })
+
+    setBookmarkPin(bookmark.id, false)
+      .catch(() => {
+        startTransition(() => {
+          setOptimisticPinned(previousPinned)
+        })
+        toast('Failed to unpin bookmark. Please try again.', {
+          icon: <Unpin size={16} />,
+          classNames: {
+            title: 'text-preset-4-medium text-neutral-900',
+          },
+        })
+      })
+      .finally(() => {
+        closeMenu()
+      })
   }
 
   return (
@@ -138,6 +192,40 @@ export const BookmarkCard = ({ bookmark }: Props) => {
                   Copy URL
                 </span>
               </button>
+
+              {!isPinned && (
+                <button
+                  className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100 dark:bg-neutral-600 dark:hover:bg-neutral-500"
+                  type="button"
+                  role="menuitem"
+                  onClick={onPinBookmark}
+                >
+                  <Pin
+                    size={16}
+                    className="text-neutral-800 dark:text-neutral-100"
+                  />
+                  <span className="text-preset-4 text-neutral-800 dark:text-neutral-100">
+                    Pin
+                  </span>
+                </button>
+              )}
+
+              {isPinned && (
+                <button
+                  className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100 dark:bg-neutral-600 dark:hover:bg-neutral-500"
+                  type="button"
+                  role="menuitem"
+                  onClick={onUnpinBookmark}
+                >
+                  <Unpin
+                    size={16}
+                    className="text-neutral-800 dark:text-neutral-100"
+                  />
+                  <span className="text-preset-4 text-neutral-800 dark:text-neutral-100">
+                    Unpin
+                  </span>
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -193,7 +281,7 @@ export const BookmarkCard = ({ bookmark }: Props) => {
 
         <div className="flex-1" />
 
-        {bookmark.pinned && (
+        {isPinned && (
           <Pin size={18} className="text-neutral-800 dark:text-neutral-100" />
         )}
       </footer>

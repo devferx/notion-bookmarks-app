@@ -4,6 +4,7 @@ import {
   getPrimaryDataSourceId,
   queryDataSourcePages,
   registerBookmarkVisit,
+  setBookmarkPin,
 } from '@/core/services/notion.service'
 
 export async function getBookmarks(): Promise<Bookmark[]> {
@@ -25,4 +26,15 @@ export async function trackBookmarkVisit(bookmarkId: string): Promise<void> {
   }
 
   await registerBookmarkVisit(bookmarkId)
+}
+
+export async function pinBookmark(
+  bookmarkId: string,
+  isPinned: boolean,
+): Promise<void> {
+  if (!bookmarkId) {
+    throw new Error('Missing bookmark id')
+  }
+
+  await setBookmarkPin(bookmarkId, isPinned)
 }
