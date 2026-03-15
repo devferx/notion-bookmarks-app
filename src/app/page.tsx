@@ -6,10 +6,12 @@ export default async function Home() {
   const bookmarks = await getBookmarks()
 
   return (
-    <main className="min-h-screen w-full bg-neutral-100">
+    <main className="min-h-screen w-full bg-neutral-100 dark:bg-neutral-900">
       <section className="px-4 pt-6 pb-16">
         <header className="flex items-center justify-between gap-4">
-          <h2 className="text-preset-1 text-neutral-900">All bookmarks</h2>
+          <h2 className="text-preset-1 dark:text-neutral-0 text-neutral-900">
+            All bookmarks
+          </h2>
         </header>
 
         <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">

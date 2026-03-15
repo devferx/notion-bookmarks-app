@@ -66,7 +66,7 @@ export const BookmarkCard = ({ bookmark }: Props) => {
 
   return (
     <article
-      className="bg-neutral-0 card-shadow grid gap-4 rounded-[10px]"
+      className="bg-neutral-0 card-shadow grid gap-4 rounded-[10px] dark:bg-neutral-800"
       key={bookmark.id}
     >
       <header className="flex items-start gap-4 px-4 pt-4">
@@ -77,15 +77,19 @@ export const BookmarkCard = ({ bookmark }: Props) => {
         />
 
         <div className="grid gap-1">
-          <h3 className="text-preset-2 text-neutral-900">{bookmark.title}</h3>
-          <p className="text-preset-5 text-neutral-800">{bookmark.domain}</p>
+          <h3 className="text-preset-2 dark:text-neutral-0 text-neutral-900">
+            {bookmark.title}
+          </h3>
+          <p className="text-preset-5 text-neutral-800 dark:text-neutral-100">
+            {bookmark.domain}
+          </p>
         </div>
 
         <div className="flex-1" />
 
         <div className="relative" ref={menuContainerRef}>
           <button
-            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-neutral-400 transition-colors duration-300 hover:bg-neutral-200"
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-neutral-400 transition-colors duration-300 hover:bg-neutral-200 dark:border-neutral-500 dark:hover:bg-neutral-600"
             ref={menuTriggerRef}
             type="button"
             aria-label={`Open actions for ${bookmark.title}`}
@@ -94,35 +98,45 @@ export const BookmarkCard = ({ bookmark }: Props) => {
             aria-controls={menuId}
             onClick={onToggleMenu}
           >
-            <DotsVertical />
+            <DotsVertical className="dark:text-neutral-0 text-neutral-900" />
           </button>
 
           {isMenuOpen && (
             <div
-              className="bg-neutral-0 menu-shadow absolute top-full right-0 mt-1.5 flex w-50 flex-col overflow-hidden rounded-lg border border-neutral-100 p-2"
+              className="bg-neutral-0 menu-shadow absolute top-full right-0 mt-1.5 flex w-50 flex-col overflow-hidden rounded-lg border border-neutral-100 p-2 dark:border-neutral-500 dark:bg-neutral-600"
               id={menuId}
               role="menu"
               aria-label={`Actions for ${bookmark.title}`}
             >
               <button
-                className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100"
+                className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100 dark:bg-neutral-600 dark:hover:bg-neutral-500"
                 ref={menuItemRef}
                 type="button"
                 role="menuitem"
                 onClick={onOpenLink}
               >
-                <LinkExternal size={16} />
-                <span className="text-preset-4 text-neutral-800">Visit</span>
+                <LinkExternal
+                  size={16}
+                  className="text-neutral-800 dark:text-neutral-100"
+                />
+                <span className="text-preset-4 text-neutral-800 dark:text-neutral-100">
+                  Visit
+                </span>
               </button>
 
               <button
-                className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100"
+                className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100 dark:bg-neutral-600 dark:hover:bg-neutral-500"
                 type="button"
                 role="menuitem"
                 onClick={onCopyLink}
               >
-                <Copy size={16} />
-                <span className="text-preset-4 text-neutral-800">Copy URL</span>
+                <Copy
+                  size={16}
+                  className="text-neutral-800 dark:text-neutral-100"
+                />
+                <span className="text-preset-4 text-neutral-800 dark:text-neutral-100">
+                  Copy URL
+                </span>
               </button>
             </div>
           )}
@@ -134,12 +148,14 @@ export const BookmarkCard = ({ bookmark }: Props) => {
       </div>
 
       <div className="mx-4 grid gap-4">
-        <p className="text-preset-4-medium">{bookmark.description}</p>
+        <p className="text-preset-4-medium dark:text-neutral-100">
+          {bookmark.description}
+        </p>
         <div className="flex items-center justify-start gap-2">
           {bookmark.tags.map((tag) => (
             <span
               key={tag}
-              className="text-preset-5 rounded bg-neutral-100 px-2 py-0.5 text-neutral-800"
+              className="text-preset-5 rounded bg-neutral-100 px-2 py-0.5 text-neutral-800 dark:bg-neutral-600 dark:text-neutral-100"
             >
               {tag}
             </span>
@@ -147,31 +163,39 @@ export const BookmarkCard = ({ bookmark }: Props) => {
         </div>
       </div>
 
-      <footer className="flex items-center gap-4 border-t border-neutral-100 px-4 py-3">
+      <footer className="flex items-center gap-4 border-t border-neutral-100 px-4 py-3 dark:border-neutral-500">
         <div className="flex items-center justify-start gap-1.5">
-          <Eye size={18} />
-          <span className="text-preset-5 text-neutral-800">
+          <Eye size={18} className="text-neutral-800 dark:text-neutral-100" />
+          <span className="text-preset-5 text-neutral-800 dark:text-neutral-100">
             {bookmark.visitCount}
           </span>
         </div>
         {bookmark.lastVisited && (
           <div className="flex items-center justify-start gap-1.5">
-            <Clock size={18} />
-            <span className="text-preset-5 text-neutral-800">
+            <Clock
+              size={18}
+              className="text-neutral-800 dark:text-neutral-100"
+            />
+            <span className="text-preset-5 text-neutral-800 dark:text-neutral-100">
               {formatBookmarkDate(bookmark.lastVisited)}
             </span>
           </div>
         )}
         <div className="flex items-center justify-start gap-1.5">
-          <Calendar size={18} />
-          <span className="text-preset-5 text-neutral-800">
+          <Calendar
+            size={18}
+            className="text-neutral-800 dark:text-neutral-100"
+          />
+          <span className="text-preset-5 text-neutral-800 dark:text-neutral-100">
             {formatBookmarkDate(bookmark.createdAt)}
           </span>
         </div>
 
         <div className="flex-1" />
 
-        {bookmark.pinned && <Pin size={18} />}
+        {bookmark.pinned && (
+          <Pin size={18} className="text-neutral-800 dark:text-neutral-100" />
+        )}
       </footer>
     </article>
   )
