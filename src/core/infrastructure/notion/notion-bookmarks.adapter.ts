@@ -1,4 +1,4 @@
-import { Bookmark } from '@/core/models/bookmark'
+import { Bookmark } from '@/core/domain/models/bookmark'
 import {
   isNotionPageRow,
   joinPlainText,
