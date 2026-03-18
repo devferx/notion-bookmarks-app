@@ -1,9 +1,8 @@
-import { getBookmarks } from '@/core/services/bookmarks.service'
-
 import { BookmarkCard } from '@/components/ui/bookmark-card'
+import { getBookmarksUseCase } from '@/core/container'
 
 export default async function Home() {
-  const bookmarks = await getBookmarks()
+  const bookmarks = await getBookmarksUseCase.execute()
 
   return (
     <main className="min-h-screen w-full bg-neutral-100 dark:bg-neutral-900">

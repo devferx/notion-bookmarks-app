@@ -4,7 +4,7 @@
 import { startTransition, useOptimistic } from 'react'
 import { toast } from 'sonner'
 
-import type { Bookmark } from '@/core/models/bookmark'
+import type { Bookmark } from '@/core/domain/models/bookmark'
 import { formatBookmarkDate } from '@/core/utils'
 
 import { setBookmarkPin, trackBookmarkVisit } from '@/actions/bookmark'
