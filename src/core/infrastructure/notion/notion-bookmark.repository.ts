@@ -33,6 +33,7 @@ export class NotionBookmarkRepository implements BookmarkRepository {
 
     await this.notionService.updatePage(bookmarkId, {
       VisitCount: { number: visitCount + 1 },
+      LastVisited: { date: { start: new Date().toISOString() } },
     })
   }
 
