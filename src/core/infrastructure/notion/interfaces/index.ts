@@ -1,2 +1,2 @@
-export * from './notion-page-row.interface';
-export * from './notion-property-value.interface';
+export * from './notion-page-row.interface'
+export * from './notion-property-value.interface'
