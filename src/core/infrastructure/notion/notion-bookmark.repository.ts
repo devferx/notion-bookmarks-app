@@ -24,8 +24,11 @@ export class NotionBookmarkRepository implements BookmarkRepository {
   async trackVisit(bookmarkId: string): Promise<void> {
     const page = await this.notionService.retrievePage(bookmarkId)
 
-    if (!('properties' in page)) return
-
+    if (!('properties' in page)) {
+      throw new Error(
+        `Notion page "${bookmarkId}" has no properties; cannot track visit.`,
+      )
+    }
     const visitCount =
       page.properties.VisitCount?.type === 'number'
         ? (page.properties.VisitCount.number ?? 0)
