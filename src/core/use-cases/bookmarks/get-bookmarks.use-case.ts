@@ -1,4 +1,4 @@
-import type { BookmarkRepository } from '@/core/domain/bookmark.repository'
+import type { BookmarkRepository } from '@/core/domain/repositories'
 import type { Bookmark } from '@/core/domain/models/bookmark'
 
 export class GetBookmarksUseCase {

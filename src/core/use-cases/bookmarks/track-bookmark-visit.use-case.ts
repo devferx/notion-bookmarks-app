@@ -1,4 +1,4 @@
-import type { BookmarkRepository } from '@/core/domain/bookmark.repository'
+import type { BookmarkRepository } from '@/core/domain/repositories'
 
 export class TrackBookmarkVisitUseCase {
   constructor(private repository: BookmarkRepository) {}

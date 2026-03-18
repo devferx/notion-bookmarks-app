@@ -1,5 +1,5 @@
-import { BookmarkRepository } from '@/domain/repositories/bookmark.repository'
-import { Bookmark } from '@/domain/models/bookmark'
+import { BookmarkRepository } from '@/core/domain/repositories/bookmark.repository'
+import { Bookmark } from '@/core/domain/models'
 import { adaptNotionRowsToBookmarks } from './notion-bookmarks.adapter'
 import { NotionService } from './notion.service'
 
