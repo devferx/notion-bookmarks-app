@@ -13,8 +13,14 @@ export class NotionService {
   private client: Client
 
   constructor() {
+    const apiKey = process.env.NOTION_API_KEY
+
+    if (!apiKey) {
+      throw new Error('Missing NOTION_API_KEY in environment variables')
+    }
+
     this.client = new Client({
-      auth: process.env.NOTION_API_KEY,
+      auth: apiKey,
     })
   }
 
