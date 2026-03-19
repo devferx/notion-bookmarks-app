@@ -7,7 +7,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen w-full bg-neutral-100 dark:bg-neutral-900">
-      <header className="bg-neutral-0 flex w-full items-center justify-between gap-2.5 px-4 py-3 dark:bg-neutral-800">
+      <header className="bg-neutral-0 sticky top-0 right-0 left-0 z-50 flex w-full items-center justify-between gap-2.5 border-b border-neutral-300 px-4 py-3 dark:border-neutral-500 dark:bg-neutral-800">
         <div className="flex items-center gap-2.5">
           <button className="bg-neutral-0 cursor-pointer rounded-lg border border-neutral-400 p-2.5 md:p-3 dark:bg-neutral-800">
             <HamburgerMenu className="dark:text-neutral-0 text-neutral-900" />
