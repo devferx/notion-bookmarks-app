@@ -7,14 +7,14 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen w-full bg-neutral-100 dark:bg-neutral-900">
-      <header className="bg-neutral-0 flex w-full items-center justify-between gap-2.5 px-4 py-3">
+      <header className="bg-neutral-0 flex w-full items-center justify-between gap-2.5 px-4 py-3 dark:bg-neutral-800">
         <div className="flex items-center gap-2.5">
-          <button className="bg-neutral-0 cursor-pointer rounded-lg border border-neutral-400 p-2.5 md:p-3">
-            <HamburgerMenu className="text-neutral-900" />
+          <button className="bg-neutral-0 cursor-pointer rounded-lg border border-neutral-400 p-2.5 md:p-3 dark:bg-neutral-800">
+            <HamburgerMenu className="dark:text-neutral-0 text-neutral-900" />
           </button>
 
           <input
-            className="text-preset-4-medium bg-search-input w-full max-w-80 rounded-lg border border-neutral-300 bg-no-repeat py-2.5 pr-3 pl-10 text-neutral-800"
+            className="text-preset-4-medium bg-search-input dark:text-neutral-0 search-input-shadow w-full max-w-80 rounded-lg border border-neutral-300 bg-no-repeat py-2.5 pr-3 pl-10 text-neutral-800 dark:border-neutral-500 dark:placeholder:text-neutral-100"
             placeholder="Search by title..."
             type="text"
           />
