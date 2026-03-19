@@ -110,3 +110,8 @@ body {
 .menu-shadow {
   box-shadow: 0 6px 14px 0 rgba(34, 38, 39, 0.1);
 }
+
+.bg-search-input {
+  background-image: url('/search.svg');
+  background-position: 12px center;
+}
