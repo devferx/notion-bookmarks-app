@@ -37,7 +37,7 @@ export default async function Home() {
         </div>
       </header>
 
-      <section className="px-4 pt-6 pb-16">
+      <section className="px-4 pt-6 pb-16 md:px-8 md:pt-8">
         <header className="flex items-center justify-between gap-4">
           <h2 className="text-preset-1 dark:text-neutral-0 text-neutral-900">
             All bookmarks
