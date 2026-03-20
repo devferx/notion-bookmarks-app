@@ -31,7 +31,7 @@ export const Sidebar = () => {
   return (
     <>
       <aside
-        className={`bg-neutral-0 fixed top-0 left-0 z-50 flex h-screen max-h-screen w-75 flex-col gap-4 border-r border-neutral-300 transition-transform duration-300 lg:sticky lg:top-0 lg:z-auto lg:translate-x-0 dark:border-neutral-500 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        className={`bg-neutral-0 fixed top-0 left-0 z-50 flex h-screen max-h-screen w-75 flex-col gap-4 border-r border-neutral-300 transition-transform duration-300 lg:sticky lg:top-0 lg:z-auto lg:translate-x-0 dark:border-neutral-500 dark:bg-neutral-800 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
         id={SIDEBAR_ID}
         aria-label="Sidebar"
       >
@@ -42,7 +42,7 @@ export const Sidebar = () => {
             onClick={onCloseSidebar}
           >
             <Logo />
-            <h1 className="font-roboto text text-xl leading-5 font-bold -tracking-[0.2px]">
+            <h1 className="font-roboto text dark:text-neutral-0 text-xl leading-5 font-bold -tracking-[0.2px]">
               Bookmark Manager
             </h1>
           </Link>
@@ -50,23 +50,27 @@ export const Sidebar = () => {
 
         <nav className="px-5" aria-label="Primary">
           <Link
-            className="flex items-center justify-start gap-2 rounded-md border border-transparent px-3 py-2 hover:border-neutral-100 hover:bg-neutral-100"
+            className="flex items-center justify-start gap-2 rounded-md border border-transparent px-3 py-2 hover:border-neutral-100 hover:bg-neutral-100 dark:hover:border-transparent dark:hover:bg-neutral-600"
             href="/"
             aria-current="page"
             ref={firstNavLinkRef}
             onClick={onCloseSidebar}
           >
             <HomeIcon className="dark:text-neutral-0 text-neutral-900" />
-            <span className="text-preset-3 text-neutral-900">Home</span>
+            <span className="text-preset-3 dark:text-neutral-0 text-neutral-900">
+              Home
+            </span>
           </Link>
 
           <Link
-            className="flex items-center justify-start gap-2 rounded-md border border-transparent px-3 py-2 text-center hover:border-neutral-100 hover:bg-neutral-100"
+            className="flex items-center justify-start gap-2 rounded-md border border-transparent px-3 py-2 hover:border-neutral-100 hover:bg-neutral-100 dark:hover:border-transparent dark:hover:bg-neutral-600"
             href="/"
             onClick={onCloseSidebar}
           >
             <Archive className="dark:text-neutral-0 text-neutral-800" />
-            <span className="text-preset-3 text-neutral-800">Archived</span>
+            <span className="text-preset-3 dark:text-neutral-0 text-neutral-800">
+              Archived
+            </span>
           </Link>
         </nav>
       </aside>
