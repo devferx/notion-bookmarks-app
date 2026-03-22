@@ -19,6 +19,7 @@ export default async function Home() {
             <input
               className="text-preset-4-medium bg-search-input search-input-shadow dark:text-neutral-0 w-full max-w-80 rounded-lg border border-neutral-300 bg-no-repeat py-2.5 pr-3 pl-10 text-neutral-800 dark:border-neutral-500 dark:placeholder:text-neutral-100"
               placeholder="Search by title..."
+              aria-label="Search bookmarks"
               type="text"
             />
           </div>
