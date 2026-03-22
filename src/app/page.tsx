@@ -1,8 +1,9 @@
+import { getBookmarksUseCase } from '@/core/container'
+
 import { Add } from '@/components/icons'
 import { BookmarkCard } from '@/components/ui/bookmark-card'
-import { MenuButton } from '@/components/ui/haburguer-menu-button'
+import { MenuButton } from '@/components/ui/menu-button'
 import { Sidebar } from '@/components/ui/sidebar'
-import { getBookmarksUseCase } from '@/core/container'
 
 export default async function Home() {
   const bookmarks = await getBookmarksUseCase.execute()
@@ -24,7 +25,10 @@ export default async function Home() {
           </div>
 
           <div className="flex items-center gap-2.5">
-            <button className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-teal-700 bg-teal-700 p-2.5 md:p-3">
+            <button
+              className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-teal-700 bg-teal-700 p-2.5 md:p-3"
+              type="button"
+            >
               <Add className="text-neutral-0" size={20} />
               <span className="text-preset-3 text-neutral-0 hidden md:block">
                 Add Bookmark
