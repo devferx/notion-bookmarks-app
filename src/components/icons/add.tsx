@@ -4,7 +4,7 @@ type Props = SVGProps<SVGSVGElement> & {
   size?: number
 }
 
-export const Add = ({ size, ...props }: Props) => (
+export const Add = ({ size = 20, ...props }: Props) => (
   <svg
     width={size}
     height={size}
