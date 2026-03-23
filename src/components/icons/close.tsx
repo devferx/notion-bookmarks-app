@@ -15,7 +15,7 @@ export const Close = ({ size = 20, ...props }: Props) => (
   >
     <path
       d="M15 5L5 15M5 5L15 15"
-      stroke="#051513"
+      stroke="currentColor"
       strokeWidth={1.5}
       strokeLinecap="round"
       strokeLinejoin="round"

@@ -18,7 +18,7 @@ export default async function Home() {
             <MenuButton />
 
             <input
-              className="text-preset-4-medium bg-search-input search-input-shadow dark:text-neutral-0 w-full max-w-80 rounded-lg border border-neutral-300 bg-no-repeat py-2.5 pr-3 pl-10 text-neutral-800 dark:border-neutral-500 dark:placeholder:text-neutral-100"
+              className="text-preset-4-medium bg-search-input dark:text-neutral-0 text-input-shadow w-full max-w-80 rounded-lg border border-neutral-300 bg-no-repeat py-2.5 pr-3 pl-10 text-neutral-800 dark:border-neutral-500 dark:placeholder:text-neutral-100"
               placeholder="Search by title..."
               aria-label="Search bookmarks"
               type="text"
@@ -46,30 +46,35 @@ export default async function Home() {
         </header>
 
         <div className="bg-overlay fixed inset-0 z-50 flex h-screen w-full items-center justify-center px-4">
-          <form className="bg-neutral-0 relative flex w-full max-w-[500px] flex-col gap-8 rounded-2xl px-5 py-6">
+          <form className="bg-neutral-0 relative flex w-full max-w-[500px] flex-col gap-8 rounded-2xl border border-transparent px-5 py-6 dark:border-neutral-500 dark:bg-neutral-800">
             <button
-              className="absolute top-5 right-5 rounded-lg border border-neutral-400 p-1.5"
+              className="absolute top-5 right-5 cursor-pointer rounded-lg border border-neutral-400 p-1.5"
               type="button"
             >
-              <Close />
+              <Close className="dark:text-neutral-0 text-neutral-900" />
             </button>
 
             <div className="flex flex-col gap-2">
-              <h3 className="text-preset-1 text-neutral-900">Add a Bookmark</h3>
-              <p className="text-preset-4-medium text-neutral-800">
+              <h3 className="text-preset-1 dark:text-neutral-0 text-neutral-900">
+                Add a Bookmark
+              </h3>
+              <p className="text-preset-4-medium text-neutral-800 dark:text-neutral-100">
                 Save a link with details to keep your collection organized.
               </p>
             </div>
 
             <div className="flex flex-col gap-1.5">
               <label
-                className="text-preset-4 flex gap-0.5 text-neutral-900"
+                className="text-preset-4 dark:text-neutral-0 flex gap-0.5 text-neutral-900"
                 htmlFor="title"
               >
-                Title <span className="text-preset-sm text-teal-700">*</span>
+                Title
+                <span className="text-preset-sm text-teal-700 dark:text-neutral-100">
+                  *
+                </span>
               </label>
               <input
-                className="text-preset-4-medium rounded-lg border border-neutral-500 p-3"
+                className="text-preset-4-medium text-input-shadow dark:text-neutral-0 rounded-lg border border-neutral-500 p-3 dark:border-neutral-300 dark:bg-neutral-600"
                 id="title"
                 type="text"
                 name="title"
@@ -78,33 +83,37 @@ export default async function Home() {
 
             <div className="flex flex-col gap-1.5">
               <label
-                className="text-preset-4 flex gap-0.5 text-neutral-900"
+                className="text-preset-4 dark:text-neutral-0 flex gap-0.5 text-neutral-900"
                 htmlFor="description"
               >
                 Description
-                <span className="text-preset-sm text-teal-700">*</span>
+                <span className="text-preset-sm text-teal-700 dark:text-neutral-100">
+                  *
+                </span>
               </label>
               <textarea
-                className="text-preset-4-medium max-h-60 min-h-22.5 resize-y rounded-lg border border-neutral-500 p-3"
+                className="text-preset-4-medium dark:text-neutral-0 max-h-60 min-h-22.5 resize-y rounded-lg border border-neutral-500 p-3 dark:border-neutral-300 dark:bg-neutral-600"
                 id="description"
                 name="description"
               />
 
-              <span className="text-preset-5 ml-auto text-neutral-800">
+              <span className="text-preset-5 ml-auto text-neutral-800 dark:text-neutral-100">
                 0/280
               </span>
             </div>
 
             <div className="flex flex-col gap-1.5">
               <label
-                className="text-preset-4 flex gap-0.5 text-neutral-900"
+                className="text-preset-4 dark:text-neutral-0 flex gap-0.5 text-neutral-900"
                 htmlFor="url"
               >
                 Website URL{' '}
-                <span className="text-preset-sm text-teal-700">*</span>
+                <span className="text-preset-sm text-teal-700 dark:text-neutral-100">
+                  *
+                </span>
               </label>
               <input
-                className="text-preset-4-medium rounded-lg border border-neutral-500 p-3"
+                className="text-preset-4-medium text-input-shadow dark:text-neutral-0 rounded-lg border border-neutral-500 p-3 dark:border-neutral-300 dark:bg-neutral-600"
                 id="url"
                 type="url"
                 name="url"
@@ -113,13 +122,16 @@ export default async function Home() {
 
             <div className="flex flex-col gap-1.5">
               <label
-                className="text-preset-4 flex gap-0.5 text-neutral-900"
+                className="text-preset-4 dark:text-neutral-0 flex gap-0.5 text-neutral-900"
                 htmlFor="tags"
               >
-                Tags <span className="text-preset-sm text-teal-700">*</span>
+                Tags{' '}
+                <span className="text-preset-sm text-teal-700 dark:text-neutral-100">
+                  *
+                </span>
               </label>
               <input
-                className="text-preset-4-medium rounded-lg border border-neutral-500 p-3"
+                className="text-preset-4-medium text-input-shadow dark:text-neutral-0 rounded-lg border border-neutral-500 p-3 dark:border-neutral-300 dark:bg-neutral-600"
                 id="tags"
                 type="text"
                 name="tags"
