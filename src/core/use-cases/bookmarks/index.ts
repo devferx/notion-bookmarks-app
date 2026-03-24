@@ -1,3 +1,5 @@
+export * from './create-bookmark/create-bookmark.input'
+export * from './create-bookmark/create-bookmark.use-case'
 export * from './get-bookmarks.use-case'
 export * from './pin-bookmark.use-case'
 export * from './track-bookmark-visit.use-case'
