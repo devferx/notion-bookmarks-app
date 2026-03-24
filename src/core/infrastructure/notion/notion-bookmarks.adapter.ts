@@ -1,4 +1,6 @@
-import { Bookmark } from '@/core/domain/models/bookmark'
+import { Bookmark, NewBookmark } from '@/core/domain/models'
+
+import { CreatePageProperties } from './notion.service'
 import {
   isNotionPageRow,
   joinPlainText,
@@ -9,6 +11,29 @@ import {
 
 interface NotionRowsResult {
   results?: unknown[]
+}
+
+export function adaptNewBookmarkToNotionProperties(
+  bookmark: NewBookmark,
+): CreatePageProperties {
+  return {
+    Title: {
+      title: [{ type: 'text', text: { content: bookmark.title } }],
+    },
+    URL: { url: bookmark.url },
+    Description: {
+      rich_text: [{ type: 'text', text: { content: bookmark.description } }],
+    },
+    Tags: {
+      multi_select: bookmark.tags.map((tag) => ({ name: tag })),
+    },
+    Pinned: { checkbox: bookmark.pinned },
+    Archived: { checkbox: bookmark.archived },
+    VisitCount: { number: bookmark.visitCount },
+    LastVisited: {
+      date: bookmark.lastVisited ? { start: bookmark.lastVisited } : null,
+    },
+  }
 }
 
 export function adaptNotionRowsToBookmarks(rows: NotionRowsResult): Bookmark[] {
