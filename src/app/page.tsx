@@ -1,6 +1,6 @@
 import { getBookmarksUseCase } from '@/core/container'
 
-import { Add, Close } from '@/components/icons'
+import { Add } from '@/components/icons'
 import { BookmarkCard } from '@/components/ui/bookmark-card'
 import { MenuButton } from '@/components/ui/menu-button'
 import { Sidebar } from '@/components/ui/sidebar'
