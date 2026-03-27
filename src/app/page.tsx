@@ -1,10 +1,9 @@
 import { getBookmarksUseCase } from '@/core/container'
 
 import { Add } from '@/components/icons'
-import { BookmarkCard } from '@/components/ui/bookmark-card'
 import { MenuButton } from '@/components/ui/menu-button'
 import { Sidebar } from '@/components/ui/sidebar'
-import { BookmarkForm } from '@/components/ui/bookmark-form'
+import { BookmarkCard, BookmarkForm } from '@/features/bookmarks/components'
 
 export default async function Home() {
   const bookmarks = await getBookmarksUseCase.execute()
