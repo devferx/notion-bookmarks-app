@@ -1,14 +1,14 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
+
 import {
   createBookmarkUseCase,
   pinBookmarkUseCase,
   trackVisitUseCase,
 } from '@/core/container'
 import type { CreateBookmarkInput } from '@/core/use-cases/bookmarks'
-import { createBookmarkSchema } from '@/features/bookmarks/schemas/bookmark-form.schema'
-
-import { revalidatePath } from 'next/cache'
+import { createBookmarkSchema } from '@/features/bookmarks/schemas'
 
 export const createBookmark = async (payload: CreateBookmarkInput) => {
   const parsedPayload = createBookmarkSchema.parse(payload)
