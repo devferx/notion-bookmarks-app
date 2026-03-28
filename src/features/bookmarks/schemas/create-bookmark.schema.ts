@@ -1,4 +1,4 @@
-import z from 'zod'
+import { z } from 'zod'
 
 import {
   BOOKMARK_DESCRIPTION_MAX_LENGTH,
