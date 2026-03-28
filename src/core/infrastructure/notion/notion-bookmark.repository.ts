@@ -1,6 +1,9 @@
 import { BookmarkRepository } from '@/core/domain/repositories/bookmark.repository'
-import { Bookmark } from '@/core/domain/models'
-import { adaptNotionRowsToBookmarks } from './notion-bookmarks.adapter'
+import { Bookmark, NewBookmark } from '@/core/domain/models'
+import {
+  adaptNewBookmarkToNotionProperties,
+  adaptNotionRowsToBookmarks,
+} from './notion-bookmarks.adapter'
 import { NotionService } from './notion.service'
 
 export class NotionBookmarkRepository implements BookmarkRepository {
@@ -19,6 +22,15 @@ export class NotionBookmarkRepository implements BookmarkRepository {
     })
 
     return adaptNotionRowsToBookmarks(rows)
+  }
+
+  async create(bookmark: NewBookmark): Promise<void> {
+    const dataSourceId = await this.notionService.getPrimaryDataSourceId()
+
+    await this.notionService.createPage(
+      dataSourceId,
+      adaptNewBookmarkToNotionProperties(bookmark),
+    )
   }
 
   async trackVisit(bookmarkId: string): Promise<void> {

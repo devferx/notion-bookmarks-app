@@ -108,6 +108,12 @@ body {
   line-height: 140%;
 }
 
+.text-preset-sm-medium {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
 .card-shadow {
   box-shadow: 0 2px 4px 0 rgba(21, 21, 21, 0.06);
 }
@@ -116,7 +122,11 @@ body {
   box-shadow: 0 6px 14px 0 rgba(34, 38, 39, 0.1);
 }
 
-.search-input-shadow {
+.button-shadow {
+  box-shadow: 0 0 0 1px rgba(34, 38, 39, 0.12);
+}
+
+.text-input-shadow {
   box-shadow: 0 1px 2px 0 rgba(10, 13, 18, 0.05);
 }
 

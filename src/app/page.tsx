@@ -1,9 +1,10 @@
 import { getBookmarksUseCase } from '@/core/container'
 
-import { Add } from '@/components/icons'
-import { BookmarkCard } from '@/components/ui/bookmark-card'
 import { MenuButton } from '@/components/ui/menu-button'
 import { Sidebar } from '@/components/ui/sidebar'
+
+import { BookmarkCard } from '@/features/bookmarks/components'
+import { CreateBookmarkDialog } from '@/features/bookmarks/components/create-bookmark-dialog'
 
 export default async function Home() {
   const bookmarks = await getBookmarksUseCase.execute()
@@ -18,7 +19,7 @@ export default async function Home() {
             <MenuButton />
 
             <input
-              className="text-preset-4-medium bg-search-input search-input-shadow dark:text-neutral-0 w-full max-w-80 rounded-lg border border-neutral-300 bg-no-repeat py-2.5 pr-3 pl-10 text-neutral-800 dark:border-neutral-500 dark:placeholder:text-neutral-100"
+              className="text-preset-4-medium bg-search-input dark:text-neutral-0 text-input-shadow w-full max-w-80 rounded-lg border border-neutral-300 bg-no-repeat py-2.5 pr-3 pl-10 text-neutral-800 dark:border-neutral-500 dark:placeholder:text-neutral-100"
               placeholder="Search by title..."
               aria-label="Search bookmarks"
               type="text"
@@ -26,15 +27,7 @@ export default async function Home() {
           </div>
 
           <div className="flex items-center gap-2.5">
-            <button
-              className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-teal-700 bg-teal-700 p-2.5 md:p-3"
-              type="button"
-            >
-              <Add className="text-neutral-0" size={20} />
-              <span className="text-preset-3 text-neutral-0 hidden md:block">
-                Add Bookmark
-              </span>
-            </button>
+            <CreateBookmarkDialog />
 
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

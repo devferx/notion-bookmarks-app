@@ -3,6 +3,9 @@ import { Client } from '@notionhq/client'
 type UpdatePageProperties = NonNullable<
   Parameters<Client['pages']['update']>[0]['properties']
 >
+export type CreatePageProperties = NonNullable<
+  Parameters<Client['pages']['create']>[0]['properties']
+>
 
 export type QueryPagesParams = Omit<
   Parameters<Client['dataSources']['query']>[0],
@@ -57,6 +60,13 @@ export class NotionService {
   async updatePage(pageId: string, properties: UpdatePageProperties) {
     await this.client.pages.update({
       page_id: pageId,
+      properties,
+    })
+  }
+
+  async createPage(dataSourceId: string, properties: CreatePageProperties) {
+    await this.client.pages.create({
+      parent: { data_source_id: dataSourceId },
       properties,
     })
   }
