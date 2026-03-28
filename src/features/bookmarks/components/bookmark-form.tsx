@@ -177,7 +177,6 @@ export const BookmarkForm = ({
           className="text-preset-3 text-neutral-0 button-shadow w-full cursor-pointer rounded-lg border border-transparent bg-teal-700 p-3 md:max-w-[145px]"
           type="submit"
           disabled={isSubmitting}
-          onClick={handleSubmit(onSubmitForm)}
         >
           {isSubmitting ? 'Saving...' : 'Add Bookmark'}
         </button>
