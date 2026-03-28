@@ -1,7 +1,5 @@
 import { z } from 'zod'
 
-import { normalizeUrl } from '@/core/utils'
-
 import {
   BOOKMARK_DESCRIPTION_MAX_LENGTH,
   BOOKMARK_TITLE_MAX_LENGTH,
@@ -34,11 +32,7 @@ export const bookmarkFormSchema = z.object({
       BOOKMARK_DESCRIPTION_MAX_LENGTH,
       `Description cannot exceed ${BOOKMARK_DESCRIPTION_MAX_LENGTH} characters`,
     ),
-  url: z
-    .string()
-    .trim()
-    .min(1, 'Website URL is required')
-    .refine((value) => Boolean(normalizeUrl(value)), 'Enter a valid URL'),
+  url: z.url(),
   tags: z
     .string()
     .trim()

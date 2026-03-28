@@ -1,9 +1,10 @@
 import { getBookmarksUseCase } from '@/core/container'
 
-import { Add } from '@/components/icons'
 import { MenuButton } from '@/components/ui/menu-button'
 import { Sidebar } from '@/components/ui/sidebar'
-import { BookmarkCard, BookmarkForm } from '@/features/bookmarks/components'
+
+import { BookmarkCard } from '@/features/bookmarks/components'
+import { CreateBookmarkDialog } from '@/features/bookmarks/components/create-bookmark-dialog'
 
 export default async function Home() {
   const bookmarks = await getBookmarksUseCase.execute()
@@ -26,15 +27,7 @@ export default async function Home() {
           </div>
 
           <div className="flex items-center gap-2.5">
-            <button
-              className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-teal-700 bg-teal-700 p-2.5 md:p-3"
-              type="button"
-            >
-              <Add className="text-neutral-0" size={20} />
-              <span className="text-preset-3 text-neutral-0 hidden md:block">
-                Add Bookmark
-              </span>
-            </button>
+            <CreateBookmarkDialog />
 
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -44,10 +37,6 @@ export default async function Home() {
             />
           </div>
         </header>
-
-        <div className="bg-overlay fixed inset-0 z-50 flex h-screen w-full items-center justify-center px-4">
-          <BookmarkForm />
-        </div>
 
         <section className="px-4 pt-6 pb-16 md:px-8 md:pt-8">
           <header className="flex items-center justify-between gap-4">

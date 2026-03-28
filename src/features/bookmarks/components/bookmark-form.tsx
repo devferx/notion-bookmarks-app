@@ -2,64 +2,55 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useWatch } from 'react-hook-form'
-import { toast } from 'sonner'
-
-import { createBookmark } from '@/actions/bookmark'
 
 import { Close } from '@/components/icons'
 
 import {
   bookmarkFormSchema,
-  parseBookmarkTags,
   type BookmarkFormValues,
 } from '@/features/bookmarks/schemas/bookmark-form.schema'
 
 import { BOOKMARK_DESCRIPTION_MAX_LENGTH } from '@/core/constants/bookmark'
 
-export const BookmarkForm = () => {
+interface BookmarkFormProps {
+  defaultValues?: BookmarkFormValues
+  onClose?: () => void
+  onSubmit: (values: BookmarkFormValues) => Promise<void>
+}
+
+export const BookmarkForm = ({
+  defaultValues,
+  onClose = () => {},
+  onSubmit,
+}: BookmarkFormProps) => {
   const {
-    register,
-    handleSubmit,
-    reset,
     control,
     formState: { errors, isSubmitting },
+    register,
+    handleSubmit,
   } = useForm<BookmarkFormValues>({
     resolver: zodResolver(bookmarkFormSchema),
+    defaultValues,
   })
 
   const descriptionLength =
     useWatch({ control, name: 'description' })?.length ?? 0
 
-  const onResetForm = () => {
-    reset()
-  }
-
-  const onSubmit = async (values: BookmarkFormValues) => {
-    try {
-      await createBookmark({
-        title: values.title.trim(),
-        description: values.description.trim(),
-        url: values.url.trim(),
-        tags: parseBookmarkTags(values.tags),
-      })
-
-      toast('Bookmark added successfully.')
-      reset()
-    } catch {
-      toast('Failed to add bookmark. Please try again.')
-    }
+  const onSubmitForm = async (values: BookmarkFormValues) => {
+    await onSubmit(values)
+    onClose()
   }
 
   return (
     <form
       className="bg-neutral-0 relative flex w-full max-w-[500px] flex-col gap-8 rounded-2xl border border-transparent px-5 py-6 dark:border-neutral-500 dark:bg-neutral-800"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmitForm)}
       noValidate
     >
       <button
         className="absolute top-5 right-5 cursor-pointer rounded-lg border border-neutral-400 p-1.5"
         type="button"
-        onClick={onResetForm}
+        onClick={onClose}
       >
         <Close className="dark:text-neutral-0 text-neutral-900" />
       </button>
@@ -130,7 +121,7 @@ export const BookmarkForm = () => {
           className="text-preset-4 dark:text-neutral-0 flex gap-0.5 text-neutral-900"
           htmlFor="url"
         >
-          Website URL{' '}
+          Website URL
           <span className="text-preset-sm text-teal-700 dark:text-neutral-100">
             *
           </span>
@@ -154,7 +145,7 @@ export const BookmarkForm = () => {
           className="text-preset-4 dark:text-neutral-0 flex gap-0.5 text-neutral-900"
           htmlFor="tags"
         >
-          Tags{' '}
+          Tags
           <span className="text-preset-sm text-teal-700 dark:text-neutral-100">
             *
           </span>
@@ -178,7 +169,7 @@ export const BookmarkForm = () => {
         <button
           className="bg-neutral-0 text-preset-3 w-full cursor-pointer rounded-lg border border-neutral-400 p-3 text-neutral-900 md:max-w-[95px]"
           type="button"
-          onClick={onResetForm}
+          onClick={onClose}
         >
           Cancel
         </button>
