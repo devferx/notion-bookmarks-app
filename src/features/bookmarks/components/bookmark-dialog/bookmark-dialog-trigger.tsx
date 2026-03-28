@@ -8,9 +8,17 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export const BookmarkDialogTrigger = ({ children, ...props }: Props) => {
   const { open } = useBookmarkDialog()
+  const { onClick, type, ...rest } = props
+
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    open()
+    if (onClick) {
+      onClick(event)
+    }
+  }
 
   return (
-    <button type="button" onClick={open} {...props}>
+    <button {...rest} type={type ?? 'button'} onClick={handleClick}>
       {children}
     </button>
   )
