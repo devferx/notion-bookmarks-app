@@ -72,7 +72,7 @@ export const BookmarkForm = ({
           htmlFor="title"
         >
           Title
-          <span className="text-preset-sm text-teal-700 dark:text-neutral-100">
+          <span className="text-preset-sm-medium text-teal-700 dark:text-neutral-100">
             *
           </span>
         </label>
@@ -96,7 +96,7 @@ export const BookmarkForm = ({
           htmlFor="description"
         >
           Description
-          <span className="text-preset-sm text-teal-700 dark:text-neutral-100">
+          <span className="text-preset-sm-medium text-teal-700 dark:text-neutral-100">
             *
           </span>
         </label>
@@ -124,7 +124,7 @@ export const BookmarkForm = ({
           htmlFor="url"
         >
           Website URL
-          <span className="text-preset-sm text-teal-700 dark:text-neutral-100">
+          <span className="text-preset-sm-medium text-teal-700 dark:text-neutral-100">
             *
           </span>
         </label>
@@ -148,7 +148,7 @@ export const BookmarkForm = ({
           htmlFor="tags"
         >
           Tags
-          <span className="text-preset-sm text-teal-700 dark:text-neutral-100">
+          <span className="text-preset-sm-medium text-teal-700 dark:text-neutral-100">
             *
           </span>
         </label>
