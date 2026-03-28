@@ -14,8 +14,9 @@ export const useCreateBookmark = () => {
       })
 
       toast('Bookmark added successfully.')
-    } catch {
+    } catch (error) {
       toast('Failed to add bookmark. Please try again.')
+      throw error
     }
   }
 

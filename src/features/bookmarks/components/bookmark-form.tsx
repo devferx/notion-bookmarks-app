@@ -37,8 +37,10 @@ export const BookmarkForm = ({
     useWatch({ control, name: 'description' })?.length ?? 0
 
   const onSubmitForm = async (values: BookmarkFormValues) => {
-    await onSubmit(values)
-    onClose()
+    try {
+      await onSubmit(values)
+      onClose()
+    } catch {}
   }
 
   return (
