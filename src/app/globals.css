@@ -138,3 +138,28 @@ body {
 .bg-overlay {
   background: rgba(19, 19, 19, 0.7);
 }
+
+.tags-title {
+  font-family: var(--font-manrope);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 140%; /* 16.8px */
+}
+
+.clear-tags-button {
+  font-family: var(--font-manrope);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 130%; /* 15.6px */
+  letter-spacing: 0.12px;
+}
+
+.tags-counter {
+  font-family: var(--font-manrope);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%; /* 16.8px */
+}
