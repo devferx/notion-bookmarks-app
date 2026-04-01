@@ -4,6 +4,8 @@ import { revalidatePath } from 'next/cache'
 
 import {
   createBookmarkUseCase,
+  getBookmarksByTagsUseCase,
+  getTagsUseCase,
   pinBookmarkUseCase,
   trackVisitUseCase,
 } from '@/core/container'
@@ -25,4 +27,12 @@ export const trackBookmarkVisit = async (bookmarkId: string) => {
 export const setBookmarkPin = async (bookmarkId: string, isPinned: boolean) => {
   await pinBookmarkUseCase.execute(bookmarkId, isPinned)
   revalidatePath('/')
+}
+
+export const getTags = async () => {
+  return getTagsUseCase.execute()
+}
+
+export const getBookmarksByTag = async (tags: string[]) => {
+  return getBookmarksByTagsUseCase.execute(tags)
 }

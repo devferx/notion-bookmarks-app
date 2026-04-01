@@ -1,5 +1,11 @@
 import { Client } from '@notionhq/client'
 
+import type { Tag } from '@/core/domain/models'
+
+import { computeTagCounts } from './notion-bookmark.mapper'
+
+import { NOTION_PROPERTIES } from '@/core/constants/notion-properties'
+
 type UpdatePageProperties = NonNullable<
   Parameters<Client['pages']['update']>[0]['properties']
 >
@@ -71,9 +77,91 @@ export class NotionService {
     })
   }
 
+  async getMultiSelectOptions(propertyName: string): Promise<string[]> {
+    const dataSourceId = await this.getPrimaryDataSourceId()
+
+    const dataSource = await this.client.dataSources.retrieve({
+      data_source_id: dataSourceId,
+    })
+
+    if (!('properties' in dataSource) || !dataSource.properties) {
+      return []
+    }
+
+    const property = dataSource.properties[propertyName]
+
+    if (!property || property.type !== 'multi_select') {
+      return []
+    }
+
+    return property.multi_select.options.map((option) => option.name)
+  }
+
+  async queryBookmarksByTags(tags: string[]) {
+    const dataSourceId = await this.getPrimaryDataSourceId()
+
+    const tagFilters = tags.map((tag) => ({
+      property: NOTION_PROPERTIES.Tags,
+      multi_select: { contains: tag },
+    }))
+
+    const filter = tagFilters.length === 1 ? tagFilters[0] : { or: tagFilters }
+
+    return this.queryPages(dataSourceId, {
+      filter,
+      sorts: [
+        { property: NOTION_PROPERTIES.Pinned, direction: 'descending' },
+        { property: NOTION_PROPERTIES.CreatedTime, direction: 'descending' },
+      ],
+      result_type: 'page',
+    })
+  }
+
+  async queryAllPages(dataSourceId: string) {
+    let results: Awaited<ReturnType<typeof this.queryPages>>['results'] = []
+    let cursor: string | undefined
+
+    do {
+      const response = await this.queryPages(dataSourceId, {
+        start_cursor: cursor,
+        result_type: 'page',
+      })
+
+      results = results.concat(response.results)
+      cursor = response.has_more
+        ? (response.next_cursor ?? undefined)
+        : undefined
+    } while (cursor)
+
+    return { results }
+  }
+
+  async getTagsWithCounts(): Promise<Tag[]> {
+    const dataSourceId = await this.getPrimaryDataSourceId()
+
+    const [tagNames, rows] = await Promise.all([
+      this.getMultiSelectOptions(NOTION_PROPERTIES.Tags),
+      this.queryAllPages(dataSourceId),
+    ])
+
+    const counts = computeTagCounts(rows)
+
+    return this.buildTagsWithCounts(tagNames, counts)
+  }
+
   async retrievePage(pageId: string) {
     return this.client.pages.retrieve({
       page_id: pageId,
     })
+  }
+
+  private buildTagsWithCounts(
+    tagNames: string[],
+    counts: Map<string, number>,
+  ): Tag[] {
+    return tagNames
+      .map((name) => ({ name, count: counts.get(name) ?? 0 }))
+      .filter((tag) => tag.count > 0)
+      .sort((a, b) => b.count - a.count)
   }
 }

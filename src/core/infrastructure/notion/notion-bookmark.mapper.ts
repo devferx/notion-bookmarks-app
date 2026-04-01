@@ -13,7 +13,7 @@ interface NotionRowsResult {
   results?: unknown[]
 }
 
-export function adaptNewBookmarkToNotionProperties(
+export function mapNewBookmarkToNotionProperties(
   bookmark: NewBookmark,
 ): CreatePageProperties {
   return {
@@ -36,7 +36,7 @@ export function adaptNewBookmarkToNotionProperties(
   }
 }
 
-export function adaptNotionRowsToBookmarks(rows: NotionRowsResult): Bookmark[] {
+export function mapNotionRowsToBookmarks(rows: NotionRowsResult): Bookmark[] {
   const results = Array.isArray(rows.results) ? rows.results : []
 
   return results.filter(isNotionPageRow).map((row) => {
@@ -74,4 +74,21 @@ export function adaptNotionRowsToBookmarks(rows: NotionRowsResult): Bookmark[] {
       lastVisited,
     }
   })
+}
+
+export function computeTagCounts(rows: NotionRowsResult): Map<string, number> {
+  const results = Array.isArray(rows.results) ? rows.results : []
+  const tagCounts = new Map<string, number>()
+
+  for (const row of results.filter(isNotionPageRow)) {
+    const tags = (row.properties.Tags?.multi_select ?? [])
+      .map((tag: { name?: string }) => tag.name ?? '')
+      .filter(Boolean)
+
+    for (const tag of tags) {
+      tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1)
+    }
+  }
+
+  return tagCounts
 }
