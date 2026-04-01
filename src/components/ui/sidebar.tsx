@@ -3,6 +3,8 @@
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 
+import type { Tag } from '@/core/domain/models'
+
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { closeSidebar } from '@/store/slices/sidebar-slice'
 
@@ -10,7 +12,11 @@ import { Archive, Home as HomeIcon, Logo } from '@/components/icons'
 
 import { SIDEBAR_ID } from '../../core/constants/sidebar'
 
-export const Sidebar = () => {
+interface SidebarProps {
+  tags: Tag[]
+}
+
+export const Sidebar = ({ tags }: SidebarProps) => {
   const dispatch = useAppDispatch()
   const isSidebarOpen = useAppSelector((state) => state.sidebar.isOpen)
   const firstNavLinkRef = useRef<HTMLAnchorElement>(null)
@@ -83,62 +89,26 @@ export const Sidebar = () => {
           </header>
 
           <ul>
-            <li className="flex items-center justify-between gap-2 px-3 py-2.5">
-              <input
-                className="h-4 w-4 cursor-pointer appearance-none rounded border-2 border-neutral-500 bg-center bg-no-repeat checked:border-teal-700 checked:bg-teal-700 checked:bg-[url('/checkmark.svg')]"
-                type="checkbox"
-                name="tag1"
-                id="tag1"
-              />
-              <label
-                className="text-preset-3 flex-1 text-neutral-800 select-none"
-                htmlFor="tag1"
-              >
-                AI
-              </label>
-
-              <span className="tags-counter flex h-6 w-6 items-center justify-center rounded-full border border-neutral-300 bg-neutral-100 text-neutral-800">
-                1
-              </span>
-            </li>
-            <li className="flex items-center justify-between gap-2 px-3 py-2.5">
-              <input
-                className="h-4 w-4 cursor-pointer appearance-none rounded border-2 border-neutral-500 bg-center bg-no-repeat checked:border-teal-700 checked:bg-teal-700 checked:bg-[url('/checkmark.svg')]"
-                type="checkbox"
-                name="tag2"
-                id="tag2"
-              />
-              <label
-                className="text-preset-3 flex-1 text-neutral-800 select-none"
-                htmlFor="tag2"
-              >
-                Commynity
-              </label>
-
-              <span className="tags-counter flex h-6 w-6 items-center justify-center rounded-full border border-neutral-300 bg-neutral-100 text-neutral-800">
-                5
-              </span>
-            </li>
-            {new Array(20).fill(null).map((_, index) => (
+            {tags.map((tag) => (
               <li
-                key={index}
+                key={tag.name}
                 className="flex items-center justify-between gap-2 px-3 py-2.5"
               >
                 <input
                   className="h-4 w-4 cursor-pointer appearance-none rounded border-2 border-neutral-500 bg-center bg-no-repeat checked:border-teal-700 checked:bg-teal-700 checked:bg-[url('/checkmark.svg')]"
                   type="checkbox"
-                  name={`tag${index + 3}`}
-                  id={`tag${index + 3}`}
+                  name={tag.name}
+                  id={`tag-${tag.name}`}
                 />
                 <label
                   className="text-preset-3 flex-1 text-neutral-800 select-none"
-                  htmlFor={`tag${index + 3}`}
+                  htmlFor={`tag-${tag.name}`}
                 >
-                  Tag {index + 3}
+                  {tag.name}
                 </label>
 
                 <span className="tags-counter flex h-6 w-6 items-center justify-center rounded-full border border-neutral-300 bg-neutral-100 text-neutral-800">
-                  {Math.floor(Math.random() * 10) + 1}
+                  {tag.count}
                 </span>
               </li>
             ))}

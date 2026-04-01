@@ -1,4 +1,4 @@
-import { getBookmarksUseCase } from '@/core/container'
+import { getBookmarksUseCase, getTagsUseCase } from '@/core/container'
 
 import { MenuButton } from '@/components/ui/menu-button'
 import { Sidebar } from '@/components/ui/sidebar'
@@ -7,11 +7,14 @@ import { BookmarkCard } from '@/features/bookmarks/components'
 import { CreateBookmarkDialog } from '@/features/bookmarks/components/create-bookmark-dialog'
 
 export default async function Home() {
-  const bookmarks = await getBookmarksUseCase.execute()
+  const [bookmarks, tags] = await Promise.all([
+    getBookmarksUseCase.execute(),
+    getTagsUseCase.execute(),
+  ])
 
   return (
     <main className="flex min-h-screen w-full bg-neutral-100 dark:bg-neutral-900">
-      <Sidebar />
+      <Sidebar tags={tags} />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="bg-neutral-0 sticky top-0 right-0 left-0 z-30 flex w-full items-center justify-between gap-2.5 border-b border-neutral-300 px-4 py-3 dark:border-neutral-500 dark:bg-neutral-800">
