@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import type { Tag } from '@/core/domain/models'
 
@@ -14,12 +15,15 @@ import { SIDEBAR_ID } from '../../core/constants/sidebar'
 
 interface SidebarProps {
   tags: Tag[]
+  selectedTags: string[]
 }
 
-export const Sidebar = ({ tags }: SidebarProps) => {
+export const Sidebar = ({ tags, selectedTags }: SidebarProps) => {
   const dispatch = useAppDispatch()
   const isSidebarOpen = useAppSelector((state) => state.sidebar.isOpen)
   const firstNavLinkRef = useRef<HTMLAnchorElement>(null)
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     if (!isSidebarOpen) return
@@ -33,6 +37,32 @@ export const Sidebar = ({ tags }: SidebarProps) => {
   const onCloseSidebar = () => {
     dispatch(closeSidebar())
   }
+
+  const onToggleTag = useCallback(
+    (tagName: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+      const current = params.get('tags')?.split(',').filter(Boolean) ?? []
+
+      const updated = current.includes(tagName)
+        ? current.filter((t) => t !== tagName)
+        : [...current, tagName]
+
+      if (updated.length > 0) {
+        params.set('tags', updated.join(','))
+      } else {
+        params.delete('tags')
+      }
+
+      router.push(`/?${params.toString()}`)
+    },
+    [searchParams, router],
+  )
+
+  const onResetTags = useCallback(() => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('tags')
+    router.push(`/?${params.toString()}`)
+  }, [searchParams, router])
 
   return (
     <>
@@ -83,7 +113,10 @@ export const Sidebar = ({ tags }: SidebarProps) => {
         <section className="flex-1 overflow-y-auto px-4 pb-5">
           <header className="bg-neutral-0 sticky top-0 flex items-center justify-between px-3 py-2 dark:bg-neutral-800">
             <h3 className="tags-title text-dark-gray uppercase">Tags</h3>
-            <button className="clear-tags-button cursor-pointer text-neutral-700 underline">
+            <button
+              className="clear-tags-button cursor-pointer text-neutral-700 underline"
+              onClick={onResetTags}
+            >
               Reset
             </button>
           </header>
@@ -99,6 +132,8 @@ export const Sidebar = ({ tags }: SidebarProps) => {
                   type="checkbox"
                   name={tag.name}
                   id={`tag-${tag.name}`}
+                  checked={selectedTags.includes(tag.name)}
+                  onChange={() => onToggleTag(tag.name)}
                 />
                 <label
                   className="text-preset-3 flex-1 text-neutral-800 select-none"
