@@ -1,14 +1,18 @@
 import {
-  getBookmarksUseCase,
   getBookmarksByTagsUseCase,
+  getBookmarksUseCase,
   getTagsUseCase,
 } from '@/core/container'
 
 import { MenuButton } from '@/components/ui/menu-button'
 import { Sidebar } from '@/components/ui/sidebar'
 
-import { BookmarkCard } from '@/features/bookmarks/components'
-import { CreateBookmarkDialog } from '@/features/bookmarks/components/create-bookmark-dialog'
+import {
+  BookmarkCard,
+  CreateBookmarkDialog,
+  TagFilterSelector,
+} from '@/features/bookmarks/components'
+import { SidebarNavMenu } from '@/features/navigation/components'
 
 interface HomeProps {
   searchParams: Promise<{ tags?: string }>
@@ -27,7 +31,10 @@ export default async function Home({ searchParams }: HomeProps) {
 
   return (
     <main className="flex min-h-screen w-full bg-neutral-100 dark:bg-neutral-900">
-      <Sidebar tags={tags} selectedTags={selectedTags} />
+      <Sidebar>
+        <SidebarNavMenu />
+        <TagFilterSelector tags={tags} selectedTags={selectedTags} />
+      </Sidebar>
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="bg-neutral-0 sticky top-0 right-0 left-0 z-30 flex w-full items-center justify-between gap-2.5 border-b border-neutral-300 px-4 py-3 dark:border-neutral-500 dark:bg-neutral-800">
