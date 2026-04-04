@@ -161,5 +161,14 @@ body {
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
-  line-height: 140%; /* 16.8px */
+  line-height: 1;
+}
+
+.bookmark-tags-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.bookmark-tags-scrollbar::-webkit-scrollbar {
+  display: none;
 }
