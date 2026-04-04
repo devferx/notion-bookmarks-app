@@ -1,19 +1,23 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useEffect } from 'react'
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { closeSidebar } from '@/store/slices/sidebar-slice'
 
-import { Archive, Home as HomeIcon, Logo } from '@/components/icons'
+import { Logo } from '@/components/icons'
 
 import { SIDEBAR_ID } from '../../core/constants/sidebar'
 
-export const Sidebar = () => {
+interface SidebarProps {
+  children?: React.ReactNode
+}
+
+export const Sidebar = ({ children }: SidebarProps) => {
   const dispatch = useAppDispatch()
+
   const isSidebarOpen = useAppSelector((state) => state.sidebar.isOpen)
-  const firstNavLinkRef = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
     if (!isSidebarOpen) return
@@ -48,31 +52,7 @@ export const Sidebar = () => {
           </Link>
         </header>
 
-        <nav className="px-5" aria-label="Primary">
-          <Link
-            className="flex items-center justify-start gap-2 rounded-md border border-transparent px-3 py-2 hover:border-neutral-100 hover:bg-neutral-100 dark:hover:border-transparent dark:hover:bg-neutral-600"
-            href="/"
-            aria-current="page"
-            ref={firstNavLinkRef}
-            onClick={onCloseSidebar}
-          >
-            <HomeIcon className="dark:text-neutral-0 text-neutral-900" />
-            <span className="text-preset-3 dark:text-neutral-0 text-neutral-900">
-              Home
-            </span>
-          </Link>
-
-          <Link
-            className="flex items-center justify-start gap-2 rounded-md border border-transparent px-3 py-2 hover:border-neutral-100 hover:bg-neutral-100 dark:hover:border-transparent dark:hover:bg-neutral-600"
-            href="/"
-            onClick={onCloseSidebar}
-          >
-            <Archive className="dark:text-neutral-0 text-neutral-800" />
-            <span className="text-preset-3 dark:text-neutral-0 text-neutral-800">
-              Archived
-            </span>
-          </Link>
-        </nav>
+        {children}
       </aside>
 
       {isSidebarOpen && (

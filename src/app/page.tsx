@@ -1,17 +1,38 @@
-import { getBookmarksUseCase } from '@/core/container'
+import {
+  getCachedBookmarks,
+  getCachedTags,
+} from '@/features/bookmarks/cache/bookmark-cache'
+import { parseTagsParam } from '@/features/bookmarks/utils/tags'
 
 import { MenuButton } from '@/components/ui/menu-button'
 import { Sidebar } from '@/components/ui/sidebar'
 
-import { BookmarkCard } from '@/features/bookmarks/components'
-import { CreateBookmarkDialog } from '@/features/bookmarks/components/create-bookmark-dialog'
+import {
+  BookmarkCard,
+  CreateBookmarkDialog,
+  TagFilterSelector,
+} from '@/features/bookmarks/components'
+import { SidebarNavMenu } from '@/features/navigation/components'
 
-export default async function Home() {
-  const bookmarks = await getBookmarksUseCase.execute()
+interface HomeProps {
+  searchParams: Promise<{ tags?: string }>
+}
+
+export default async function Home({ searchParams }: HomeProps) {
+  const { tags: tagsParam } = await searchParams
+  const selectedTags = parseTagsParam(tagsParam)
+
+  const [bookmarks, tags] = await Promise.all([
+    getCachedBookmarks(selectedTags),
+    getCachedTags(),
+  ])
 
   return (
     <main className="flex min-h-screen w-full bg-neutral-100 dark:bg-neutral-900">
-      <Sidebar />
+      <Sidebar>
+        <SidebarNavMenu />
+        <TagFilterSelector tags={tags} selectedTags={selectedTags} />
+      </Sidebar>
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="bg-neutral-0 sticky top-0 right-0 left-0 z-30 flex w-full items-center justify-between gap-2.5 border-b border-neutral-300 px-4 py-3 dark:border-neutral-500 dark:bg-neutral-800">
@@ -41,7 +62,9 @@ export default async function Home() {
         <section className="px-4 pt-6 pb-16 md:px-8 md:pt-8">
           <header className="flex items-center justify-between gap-4">
             <h2 className="text-preset-1 dark:text-neutral-0 text-neutral-900">
-              All bookmarks
+              {selectedTags.length > 0
+                ? `Bookmarks tagged: ${selectedTags.join(', ')}`
+                : 'All bookmarks'}
             </h2>
           </header>
 

@@ -1,9 +1,10 @@
-import { BookmarkRepository } from '@/core/domain/repositories/bookmark.repository'
-import { Bookmark, NewBookmark } from '@/core/domain/models'
+import { BOOKMARKS_PAGE_SIZE } from '@/core/constants/bookmark'
+import type { Bookmark, NewBookmark, Tag } from '@/core/domain/models'
+import type { BookmarkRepository } from '@/core/domain/repositories/bookmark.repository'
 import {
-  adaptNewBookmarkToNotionProperties,
-  adaptNotionRowsToBookmarks,
-} from './notion-bookmarks.adapter'
+  mapNewBookmarkToNotionProperties,
+  mapNotionRowsToBookmarks,
+} from './notion-bookmark.mapper'
 import { NotionService } from './notion.service'
 
 export class NotionBookmarkRepository implements BookmarkRepository {
@@ -17,11 +18,20 @@ export class NotionBookmarkRepository implements BookmarkRepository {
         { property: 'Pinned', direction: 'descending' },
         { property: 'CreatedTime', direction: 'descending' },
       ],
-      page_size: 25,
+      page_size: BOOKMARKS_PAGE_SIZE,
       result_type: 'page',
     })
 
-    return adaptNotionRowsToBookmarks(rows)
+    return mapNotionRowsToBookmarks(rows)
+  }
+
+  async getByTags(tags: string[]): Promise<Bookmark[]> {
+    const rows = await this.notionService.queryBookmarksByTags(tags)
+    return mapNotionRowsToBookmarks(rows)
+  }
+
+  async getAllTags(): Promise<Tag[]> {
+    return this.notionService.getTagsWithCounts()
   }
 
   async create(bookmark: NewBookmark): Promise<void> {
@@ -29,7 +39,7 @@ export class NotionBookmarkRepository implements BookmarkRepository {
 
     await this.notionService.createPage(
       dataSourceId,
-      adaptNewBookmarkToNotionProperties(bookmark),
+      mapNewBookmarkToNotionProperties(bookmark),
     )
   }
 
