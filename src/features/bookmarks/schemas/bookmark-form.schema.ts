@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 import {
   BOOKMARK_DESCRIPTION_MAX_LENGTH,
+  BOOKMARK_TAG_SEPARATOR,
   BOOKMARK_TITLE_MAX_LENGTH,
 } from '@/core/constants/bookmark'
 
@@ -9,9 +10,9 @@ export const parseBookmarkTags = (rawTags: string): string[] => {
   return Array.from(
     new Set(
       rawTags
-        .replaceAll(', ', ',')
-        .replaceAll(' ,', ',')
-        .split(',')
+        .replaceAll(', ', BOOKMARK_TAG_SEPARATOR)
+        .replaceAll(' ,', BOOKMARK_TAG_SEPARATOR)
+        .split(BOOKMARK_TAG_SEPARATOR)
         .map((tag) => tag.trim())
         .filter(Boolean),
     ),
