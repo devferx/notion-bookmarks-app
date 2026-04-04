@@ -77,11 +77,15 @@ export class NotionService {
     })
   }
 
-  async getMultiSelectOptions(propertyName: string): Promise<string[]> {
-    const dataSourceId = await this.getPrimaryDataSourceId()
+  async getMultiSelectOptions(
+    propertyName: string,
+    dataSourceId?: string,
+  ): Promise<string[]> {
+    const resolvedDataSourceId =
+      dataSourceId ?? (await this.getPrimaryDataSourceId())
 
     const dataSource = await this.client.dataSources.retrieve({
-      data_source_id: dataSourceId,
+      data_source_id: resolvedDataSourceId,
     })
 
     if (!('properties' in dataSource) || !dataSource.properties) {
@@ -117,14 +121,16 @@ export class NotionService {
     })
   }
 
-  async queryAllPages(dataSourceId: string) {
+  async queryAllPages(dataSourceId: string, params: QueryPagesParams = {}) {
     let results: Awaited<ReturnType<typeof this.queryPages>>['results'] = []
     let cursor: string | undefined
 
     do {
       const response = await this.queryPages(dataSourceId, {
+        ...params,
         start_cursor: cursor,
         result_type: 'page',
+        page_size: params.page_size ?? 100,
       })
 
       results = results.concat(response.results)
@@ -139,9 +145,22 @@ export class NotionService {
   async getTagsWithCounts(): Promise<Tag[]> {
     const dataSourceId = await this.getPrimaryDataSourceId()
 
+    const tagCountingFilter = {
+      and: [
+        {
+          property: NOTION_PROPERTIES.Archived,
+          checkbox: { equals: false },
+        },
+        {
+          property: NOTION_PROPERTIES.Tags,
+          multi_select: { is_not_empty: true as const },
+        },
+      ],
+    }
+
     const [tagNames, rows] = await Promise.all([
-      this.getMultiSelectOptions(NOTION_PROPERTIES.Tags),
-      this.queryAllPages(dataSourceId),
+      this.getMultiSelectOptions(NOTION_PROPERTIES.Tags, dataSourceId),
+      this.queryAllPages(dataSourceId, { filter: tagCountingFilter }),
     ])
 
     const counts = computeTagCounts(rows)

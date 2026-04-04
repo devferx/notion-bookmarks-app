@@ -81,6 +81,15 @@ export function computeTagCounts(rows: NotionRowsResult): Map<string, number> {
   const tagCounts = new Map<string, number>()
 
   for (const row of results.filter(isNotionPageRow)) {
+    const isArchived =
+      row.properties.Archived?.checkbox === true ||
+      row.archived === true ||
+      row.in_trash === true
+
+    if (isArchived) {
+      continue
+    }
+
     const tags = (row.properties.Tags?.multi_select ?? [])
       .map((tag: { name?: string }) => tag.name ?? '')
       .filter(Boolean)
