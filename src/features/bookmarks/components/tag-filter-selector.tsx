@@ -43,13 +43,13 @@ export const TagFilterSelector = ({ tags, selectedTags }: TagListProps) => {
                 onChange={() => onToggleTag(tag.name)}
               />
               <label
-                className="text-preset-3 flex-1 text-neutral-800 select-none dark:text-neutral-100"
+                className="text-preset-3 flex-1 cursor-pointer text-neutral-800 select-none dark:text-neutral-100"
                 htmlFor={tagId}
               >
                 {tag.name}
               </label>
 
-              <span className="tags-counter flex h-6 w-6 items-center justify-center rounded-full border border-neutral-300 bg-neutral-100 text-neutral-800">
+              <span className="tags-counter dark:text-neutral-0 flex h-6 w-6 items-center justify-center rounded-full border border-neutral-300 bg-neutral-100 text-center text-neutral-800 dark:border-neutral-400 dark:bg-neutral-600">
                 {tag.count}
               </span>
             </li>
