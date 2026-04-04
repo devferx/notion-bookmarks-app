@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import { BOOKMARK_TAG_SEPARATOR } from '@/core/constants/bookmark'
+import { normalizeTags, parseTagsParam } from '@/features/bookmarks/utils/tags'
 
 export const useTagFilter = () => {
   const router = useRouter()
@@ -15,12 +16,16 @@ export const useTagFilter = () => {
   const onToggleTag = useCallback(
     (tagName: string) => {
       const params = new URLSearchParams(searchParams.toString())
-      const current =
-        params.get('tags')?.split(BOOKMARK_TAG_SEPARATOR).filter(Boolean) ?? []
+      const current = parseTagsParam(params.get('tags') ?? undefined)
+      const normalizedTagName = tagName.trim()
 
-      const updated = current.includes(tagName)
-        ? current.filter((t) => t !== tagName)
-        : [...current, tagName]
+      if (!normalizedTagName) {
+        return
+      }
+
+      const updated = current.includes(normalizedTagName)
+        ? current.filter((t) => t !== normalizedTagName)
+        : normalizeTags([...current, normalizedTagName])
 
       if (updated.length > 0) {
         params.set('tags', updated.join(BOOKMARK_TAG_SEPARATOR))
