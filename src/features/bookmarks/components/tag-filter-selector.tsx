@@ -26,31 +26,35 @@ export const TagFilterSelector = ({ tags, selectedTags }: TagListProps) => {
       </header>
 
       <ul>
-        {tags.map((tag) => (
-          <li
-            key={tag.name}
-            className="flex items-center justify-between gap-2 px-3 py-2.5"
-          >
-            <input
-              className="h-4 w-4 cursor-pointer appearance-none rounded border-2 border-neutral-500 bg-center bg-no-repeat checked:border-teal-700 checked:bg-teal-700 checked:bg-[url('/checkmark.svg')]"
-              type="checkbox"
-              name={tag.name}
-              id={`tag-${tag.name}`}
-              checked={selectedTags.includes(tag.name)}
-              onChange={() => onToggleTag(tag.name)}
-            />
-            <label
-              className="text-preset-3 flex-1 cursor-pointer text-neutral-800 select-none dark:text-neutral-100"
-              htmlFor={`tag-${tag.name}`}
-            >
-              {tag.name}
-            </label>
+        {tags.map((tag) => {
+          const tagId = `tag-${encodeURIComponent(tag.name)}`
 
-            <span className="tags-counter dark:text-neutral-0 flex h-6 w-6 items-center justify-center rounded-full border border-neutral-300 bg-neutral-100 text-center text-neutral-800 dark:border-neutral-400 dark:bg-neutral-600">
-              {tag.count}
-            </span>
-          </li>
-        ))}
+          return (
+            <li
+              key={tag.name}
+              className="flex items-center justify-between gap-2 px-3 py-2.5"
+            >
+              <input
+                className="h-4 w-4 cursor-pointer appearance-none rounded border-2 border-neutral-500 bg-center bg-no-repeat checked:border-teal-700 checked:bg-teal-700 checked:bg-[url('/checkmark.svg')]"
+                type="checkbox"
+                name={tag.name}
+                id={tagId}
+                checked={selectedTags.includes(tag.name)}
+                onChange={() => onToggleTag(tag.name)}
+              />
+              <label
+                className="text-preset-3 flex-1 text-neutral-800 select-none"
+                htmlFor={tagId}
+              >
+                {tag.name}
+              </label>
+
+              <span className="tags-counter flex h-6 w-6 items-center justify-center rounded-full border border-neutral-300 bg-neutral-100 text-neutral-800">
+                {tag.count}
+              </span>
+            </li>
+          )
+        })}
       </ul>
     </section>
   )
