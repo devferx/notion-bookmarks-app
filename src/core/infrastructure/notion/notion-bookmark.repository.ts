@@ -1,6 +1,6 @@
-import { BookmarkRepository } from '@/core/domain/repositories/bookmark.repository'
-import { Bookmark, NewBookmark, Tag } from '@/core/domain/models'
 import { BOOKMARKS_PAGE_SIZE } from '@/core/constants/bookmark'
+import type { Bookmark, NewBookmark, Tag } from '@/core/domain/models'
+import type { BookmarkRepository } from '@/core/domain/repositories/bookmark.repository'
 import {
   mapNewBookmarkToNotionProperties,
   mapNotionRowsToBookmarks,
