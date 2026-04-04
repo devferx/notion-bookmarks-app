@@ -1,4 +1,4 @@
-import { NotionPageRow } from '@/core/infrastructure/notion/interfaces'
+import type { NotionPageRow } from '@/core/infrastructure/notion/interfaces'
 
 export function extractRichText(
   items?: Array<{ plain_text?: string }>,

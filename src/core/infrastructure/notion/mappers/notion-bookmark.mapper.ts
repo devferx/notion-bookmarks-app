@@ -1,6 +1,6 @@
 import { Bookmark, NewBookmark } from '@/core/domain/models'
 
-import { CreatePageProperties } from '@/core/infrastructure/notion/notion.service'
+import type { CreatePageProperties } from '@/core/infrastructure/notion/notion.service'
 
 import { normalizeUrl, toDomain, toFaviconUrl } from '@/core/utils'
 import { extractRichText, isNotionPageRow } from '../utils/notion-parsing.utils'
