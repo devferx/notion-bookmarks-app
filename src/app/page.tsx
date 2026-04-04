@@ -1,8 +1,8 @@
 import {
-  getBookmarksByTagsUseCase,
-  getBookmarksUseCase,
-  getTagsUseCase,
-} from '@/core/container'
+  getCachedBookmarks,
+  getCachedTags,
+} from '@/features/bookmarks/cache/bookmark-cache'
+import { parseTagsParam } from '@/features/bookmarks/utils/tags'
 
 import { MenuButton } from '@/components/ui/menu-button'
 import { Sidebar } from '@/components/ui/sidebar'
@@ -20,13 +20,11 @@ interface HomeProps {
 
 export default async function Home({ searchParams }: HomeProps) {
   const { tags: tagsParam } = await searchParams
-  const selectedTags = tagsParam ? tagsParam.split(',') : []
+  const selectedTags = parseTagsParam(tagsParam)
 
   const [bookmarks, tags] = await Promise.all([
-    selectedTags.length > 0
-      ? getBookmarksByTagsUseCase.execute(selectedTags)
-      : getBookmarksUseCase.execute(),
-    getTagsUseCase.execute(),
+    getCachedBookmarks(selectedTags),
+    getCachedTags(),
   ])
 
   return (

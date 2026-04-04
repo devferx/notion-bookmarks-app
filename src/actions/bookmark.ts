@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidateTag } from 'next/cache'
 
 import {
   createBookmarkUseCase,
@@ -9,6 +9,7 @@ import {
   pinBookmarkUseCase,
   trackVisitUseCase,
 } from '@/core/container'
+import { BOOKMARK_CACHE_TAGS } from '@/core/constants/bookmark'
 import type { CreateBookmarkInput } from '@/core/use-cases/bookmarks'
 import { createBookmarkSchema } from '@/features/bookmarks/schemas'
 
@@ -16,17 +17,18 @@ export const createBookmark = async (payload: CreateBookmarkInput) => {
   const parsedPayload = createBookmarkSchema.parse(payload)
 
   await createBookmarkUseCase.execute(parsedPayload)
-  revalidatePath('/')
+  revalidateTag(BOOKMARK_CACHE_TAGS.bookmarksList, 'max')
+  revalidateTag(BOOKMARK_CACHE_TAGS.bookmarksTags, 'max')
 }
 
 export const trackBookmarkVisit = async (bookmarkId: string) => {
   await trackVisitUseCase.execute(bookmarkId)
-  revalidatePath('/')
+  revalidateTag(BOOKMARK_CACHE_TAGS.bookmarksList, 'max')
 }
 
 export const setBookmarkPin = async (bookmarkId: string, isPinned: boolean) => {
   await pinBookmarkUseCase.execute(bookmarkId, isPinned)
-  revalidatePath('/')
+  revalidateTag(BOOKMARK_CACHE_TAGS.bookmarksList, 'max')
 }
 
 export const getTags = async () => {
