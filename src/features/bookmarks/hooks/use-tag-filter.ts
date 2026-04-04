@@ -7,6 +7,11 @@ export const useTagFilter = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  const buildUrl = useCallback((params: URLSearchParams) => {
+    const query = params.toString()
+    return query ? `/?${query}` : '/'
+  }, [])
+
   const onToggleTag = useCallback(
     (tagName: string) => {
       const params = new URLSearchParams(searchParams.toString())
@@ -23,16 +28,16 @@ export const useTagFilter = () => {
         params.delete('tags')
       }
 
-      router.push(`/?${params.toString()}`)
+      router.push(buildUrl(params))
     },
-    [searchParams, router],
+    [searchParams, router, buildUrl],
   )
 
   const onResetTags = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString())
     params.delete('tags')
-    router.push(`/?${params.toString()}`)
-  }, [searchParams, router])
+    router.push(buildUrl(params))
+  }, [searchParams, router, buildUrl])
 
   return { onToggleTag, onResetTags }
 }
