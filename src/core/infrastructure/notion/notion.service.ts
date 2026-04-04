@@ -2,10 +2,10 @@ import { Client } from '@notionhq/client'
 
 import type { Tag } from '@/core/domain/models'
 
-import { computeTagCounts } from './notion-bookmark.mapper'
+import { computeTagCounts } from '@/core/infrastructure/notion/mappers'
 
-import { NOTION_PROPERTIES } from '@/core/constants/notion-properties'
 import { BOOKMARKS_PAGE_SIZE } from '@/core/constants/bookmark'
+import { NOTION_PROPERTIES } from '@/core/infrastructure/notion/constants'
 
 type UpdatePageProperties = NonNullable<
   Parameters<Client['pages']['update']>[0]['properties']
