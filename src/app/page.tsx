@@ -35,12 +35,12 @@ export default async function Home({ searchParams }: HomeProps) {
       </Sidebar>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="bg-neutral-0 sticky top-0 right-0 left-0 z-30 flex w-full items-center justify-between gap-2.5 border-b border-neutral-300 px-4 py-3 dark:border-neutral-500 dark:bg-neutral-800">
-          <div className="flex items-center gap-2.5">
+        <header className="bg-neutral-0 sticky top-0 right-0 left-0 z-30 flex items-center justify-between gap-2.5 border-b border-neutral-300 px-4 py-3 dark:border-neutral-500 dark:bg-neutral-800">
+          <div className="flex items-center justify-start gap-2.5">
             <MenuButton />
 
             <input
-              className="text-preset-4-medium bg-search-input dark:text-neutral-0 text-input-shadow w-full max-w-80 rounded-lg border border-neutral-300 bg-no-repeat py-2.5 pr-3 pl-10 text-neutral-800 dark:border-neutral-500 dark:placeholder:text-neutral-100"
+              className="text-preset-4-medium bg-search-input dark:text-neutral-0 text-input-shadow w-full max-w-80 rounded-lg border border-neutral-300 bg-no-repeat py-2.5 pr-3 pl-10 text-neutral-800 md:min-w-80 dark:border-neutral-500 dark:placeholder:text-neutral-100"
               placeholder="Search by title..."
               aria-label="Search bookmarks"
               type="text"
