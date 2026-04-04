@@ -1,6 +1,8 @@
 import { NotionPageRow } from '@/core/infrastructure/notion/interfaces'
 
-export function joinPlainText(items?: Array<{ plain_text?: string }>): string {
+export function extractRichText(
+  items?: Array<{ plain_text?: string }>,
+): string {
   if (!items || items.length === 0) return ''
 
   return items

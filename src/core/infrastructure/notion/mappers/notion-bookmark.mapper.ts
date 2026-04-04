@@ -1,13 +1,9 @@
 import { Bookmark, NewBookmark } from '@/core/domain/models'
 
-import { CreatePageProperties } from './notion.service'
-import {
-  isNotionPageRow,
-  joinPlainText,
-  normalizeUrl,
-  toDomain,
-  toFaviconUrl,
-} from '@/core/utils'
+import { CreatePageProperties } from '@/core/infrastructure/notion/notion.service'
+
+import { normalizeUrl, toDomain, toFaviconUrl } from '@/core/utils'
+import { extractRichText, isNotionPageRow } from '../utils/notion-parsing.utils'
 
 interface NotionRowsResult {
   results?: unknown[]
@@ -42,11 +38,12 @@ export function mapNotionRowsToBookmarks(rows: NotionRowsResult): Bookmark[] {
   return results.filter(isNotionPageRow).map((row) => {
     const props = row.properties
 
-    const title = joinPlainText(props.Title?.title) || 'Untitled'
+    const title = extractRichText(props.Title?.title) || 'Untitled'
     const rawUrl = props.URL?.url ?? ''
     const url = normalizeUrl(rawUrl) ?? rawUrl
     const domain = toDomain(rawUrl) ?? ''
-    const description = joinPlainText(props.Description?.rich_text) || undefined
+    const description =
+      extractRichText(props.Description?.rich_text) || undefined
     const tags = (props.Tags?.multi_select ?? [])
       .map((tag: { name?: string }) => tag.name ?? '')
       .filter(Boolean)

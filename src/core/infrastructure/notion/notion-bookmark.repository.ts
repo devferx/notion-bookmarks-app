@@ -4,7 +4,7 @@ import type { BookmarkRepository } from '@/core/domain/repositories/bookmark.rep
 import {
   mapNewBookmarkToNotionProperties,
   mapNotionRowsToBookmarks,
-} from './notion-bookmark.mapper'
+} from './mappers'
 import { NotionService } from './notion.service'
 
 export class NotionBookmarkRepository implements BookmarkRepository {
