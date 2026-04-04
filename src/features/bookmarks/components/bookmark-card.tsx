@@ -120,7 +120,7 @@ export const BookmarkCard = ({ bookmark }: Props) => {
 
   return (
     <article
-      className="bg-neutral-0 card-shadow grid gap-4 rounded-[10px] dark:bg-neutral-800"
+      className="bg-neutral-0 card-shadow flex flex-col gap-4 rounded-[10px] dark:bg-neutral-800"
       key={bookmark.id}
     >
       <header className="flex items-start gap-4 px-4 pt-4">
@@ -235,10 +235,11 @@ export const BookmarkCard = ({ bookmark }: Props) => {
         <div className="h-px w-full bg-neutral-300" />
       </div>
 
-      <div className="mx-4 grid gap-4">
+      <div className="mx-4 flex flex-1 flex-col gap-4">
         <p className="text-preset-4-medium dark:text-neutral-100">
           {bookmark.description}
         </p>
+        <div className="flex-1"></div>
         <div className="flex items-center justify-start gap-2">
           {bookmark.tags.map((tag) => (
             <span
