@@ -5,6 +5,7 @@ import type { Tag } from '@/core/domain/models'
 import { computeTagCounts } from './notion-bookmark.mapper'
 
 import { NOTION_PROPERTIES } from '@/core/constants/notion-properties'
+import { BOOKMARKS_PAGE_SIZE } from '@/core/constants/bookmark'
 
 type UpdatePageProperties = NonNullable<
   Parameters<Client['pages']['update']>[0]['properties']
@@ -117,6 +118,7 @@ export class NotionService {
         { property: NOTION_PROPERTIES.Pinned, direction: 'descending' },
         { property: NOTION_PROPERTIES.CreatedTime, direction: 'descending' },
       ],
+      page_size: BOOKMARKS_PAGE_SIZE,
       result_type: 'page',
     })
   }

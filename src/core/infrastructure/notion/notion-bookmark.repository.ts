@@ -1,5 +1,6 @@
 import { BookmarkRepository } from '@/core/domain/repositories/bookmark.repository'
 import { Bookmark, NewBookmark, Tag } from '@/core/domain/models'
+import { BOOKMARKS_PAGE_SIZE } from '@/core/constants/bookmark'
 import {
   mapNewBookmarkToNotionProperties,
   mapNotionRowsToBookmarks,
@@ -17,7 +18,7 @@ export class NotionBookmarkRepository implements BookmarkRepository {
         { property: 'Pinned', direction: 'descending' },
         { property: 'CreatedTime', direction: 'descending' },
       ],
-      page_size: 25,
+      page_size: BOOKMARKS_PAGE_SIZE,
       result_type: 'page',
     })
 

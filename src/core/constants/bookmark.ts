@@ -16,3 +16,4 @@ export const BOOKMARK_CACHE_TAGS = {
 } as const
 
 export const BOOKMARK_TAG_SEPARATOR = ',' as const
+export const BOOKMARKS_PAGE_SIZE = 25 as const
