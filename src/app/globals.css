@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --neutral-0: #ffffff;
   --neutral-100: #e8f0ef;
@@ -41,17 +43,15 @@
   --color-red-800: var(--red-800);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --neutral-0: #ffffff;
-    --neutral-100: #b1b9b9;
-    --neutral-300: #00706e;
-    --neutral-400: #004746;
-    --neutral-500: #004241;
-    --neutral-600: #002e2d;
-    --neutral-800: #001f1f;
-    --neutral-900: #001414;
-  }
+.dark {
+  --neutral-0: #ffffff;
+  --neutral-100: #b1b9b9;
+  --neutral-300: #00706e;
+  --neutral-400: #004746;
+  --neutral-500: #004241;
+  --neutral-600: #002e2d;
+  --neutral-800: #001f1f;
+  --neutral-900: #001414;
 }
 
 body {

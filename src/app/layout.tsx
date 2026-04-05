@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
+import { ThemeProvider } from 'next-themes'
 import { Manrope, Roboto } from 'next/font/google'
 import { Toaster } from 'sonner'
+
 import { StoreProvider } from '@/store/provider'
 
 import './globals.css'
@@ -27,10 +29,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${manrope.variable} ${roboto.variable}`}>
-        <StoreProvider>{children}</StoreProvider>
-        <Toaster position="top-right" />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <StoreProvider>{children}</StoreProvider>
+          <Toaster position="top-right" />
+        </ThemeProvider>
       </body>
     </html>
   )
