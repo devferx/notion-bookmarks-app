@@ -21,7 +21,7 @@ export const UserMenu = () => {
         ref={triggerRef}
         onClick={onToggleMenu}
         aria-label="User menu"
-        aria-haspopup="dialog"
+        aria-haspopup="menu"
         aria-expanded={isOpen}
         aria-controls={menuId}
       >
@@ -36,8 +36,8 @@ export const UserMenu = () => {
       {isOpen && (
         <div
           id={menuId}
-          role="dialog"
-          aria-modal="false"
+          role="menu"
+          aria-orientation="vertical"
           aria-labelledby={menuTitleId}
           tabIndex={-1}
           ref={menuRef}
@@ -65,25 +65,36 @@ export const UserMenu = () => {
             </div>
           </div>
 
-          <div className="px-2 py-1">
-            <div className="flex items-center justify-start gap-2.5 px-2 py-2">
+          <div className="px-2 py-1" role="none">
+            <div
+              className="flex items-center justify-start gap-2.5 px-2 py-2"
+              role="none"
+            >
               <Palette className="text-neutral-800 dark:text-neutral-100" />
               <label
                 className="text-preset-4 flex-1 text-neutral-800 dark:text-neutral-100"
                 htmlFor="theme-toggle"
+                id="theme-toggle-label"
               >
                 Theme
               </label>
 
-              <ThemeToggleButton />
+              <ThemeToggleButton
+                inputRole="menuitemcheckbox"
+                ariaLabelledBy="theme-toggle-label"
+              />
             </div>
           </div>
 
-          <div className="border-t border-neutral-200 hover:bg-neutral-300 dark:border-neutral-500 dark:hover:bg-neutral-500">
+          <div
+            className="border-t border-neutral-200 hover:bg-neutral-300 dark:border-neutral-500 dark:hover:bg-neutral-500"
+            role="none"
+          >
             <button
               className="flex w-full cursor-pointer gap-2.5 p-4"
               type="button"
               aria-label="Logout"
+              role="menuitem"
             >
               <Logout className="text-neutral-800 dark:text-neutral-100" />
               <span className="text-preset-4 text-neutral-800 dark:text-neutral-100">

@@ -1,10 +1,19 @@
 'use client'
 
 import { useTheme } from 'next-themes'
+import type { AriaRole } from 'react'
 
 import { Moon, Sun } from '../icons'
 
-export const ThemeToggleButton = () => {
+interface ThemeToggleButtonProps {
+  inputRole?: AriaRole
+  ariaLabelledBy?: string
+}
+
+export const ThemeToggleButton = ({
+  inputRole,
+  ariaLabelledBy,
+}: ThemeToggleButtonProps) => {
   const { theme, setTheme } = useTheme()
 
   const onToggleTheme = () => {
@@ -33,6 +42,8 @@ export const ThemeToggleButton = () => {
         type="checkbox"
         checked={theme === 'dark'}
         onChange={onToggleTheme}
+        role={inputRole}
+        aria-labelledby={ariaLabelledBy}
       />
 
       <div className="relative flex items-center justify-between rounded-sm bg-neutral-300 p-0.5 dark:bg-neutral-500">
