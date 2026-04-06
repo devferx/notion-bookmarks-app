@@ -17,14 +17,14 @@ export const ThemeToggleButton = ({
   inputRole,
   ariaLabelledBy,
 }: ThemeToggleButtonProps) => {
-  const { theme, setTheme } = useTheme()
+  const { resolvedTheme, setTheme } = useTheme()
   const generatedId = useId()
   const inputId = id ?? generatedId
 
-  const onToggleTheme = () => {
-    const isDark = theme === 'dark'
+  const isThemeDark = resolvedTheme === 'dark'
 
-    const nextTheme = isDark ? 'light' : 'dark'
+  const onToggleTheme = () => {
+    const nextTheme = isThemeDark ? 'light' : 'dark'
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches
@@ -45,7 +45,7 @@ export const ThemeToggleButton = ({
         id={inputId}
         className="peer sr-only"
         type="checkbox"
-        checked={theme === 'dark'}
+        checked={isThemeDark}
         onChange={onToggleTheme}
         role={inputRole}
         aria-labelledby={ariaLabelledBy}
