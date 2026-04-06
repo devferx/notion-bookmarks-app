@@ -19,7 +19,7 @@ import {
   Unpin,
 } from '@/components/icons'
 
-import { useMenuActions } from '@/hooks/use-menu-actions'
+import { useMenu } from '@/hooks/use-menu'
 
 type Props = {
   bookmark: Bookmark
@@ -29,14 +29,14 @@ export const BookmarkCard = ({ bookmark }: Props) => {
   const [isPinned, setOptimisticPinned] = useOptimistic(bookmark.pinned)
 
   const {
-    isMenuOpen,
-    menuContainerRef,
+    containerRef: menuContainerRef,
+    isOpen: isMenuOpen,
     menuId,
-    menuItemRef,
-    menuTriggerRef,
+    menuRef: menuItemRef,
+    triggerRef: menuTriggerRef,
     closeMenu,
     onToggleMenu,
-  } = useMenuActions()
+  } = useMenu<HTMLButtonElement>()
 
   const onOpenLink = () => {
     try {

@@ -1,32 +1,29 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useId } from 'react'
+
+import { useMenu } from '@/hooks/use-menu'
 
 import { ThemeToggleButton } from './theme-toggle'
 
 import { Logout, Palette } from '../icons'
 
 export const UserMenu = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setIsOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+  const { isOpen, containerRef, menuRef, triggerRef, menuId, onToggleMenu } =
+    useMenu<HTMLDivElement>({ closeOnFocusOut: true })
+  const menuTitleId = useId()
 
   return (
-    <div className="relative h-10 w-10" ref={ref}>
+    <div className="relative h-10 w-10" ref={containerRef}>
       <button
         className="h-10 w-10 cursor-pointer overflow-hidden rounded-full"
         type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
+        ref={triggerRef}
+        onClick={onToggleMenu}
         aria-label="User menu"
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
+        aria-controls={menuId}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -37,11 +34,20 @@ export const UserMenu = () => {
       </button>
 
       {isOpen && (
-        <menu
-          aria-label="User menu"
+        <div
+          id={menuId}
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby={menuTitleId}
+          tabIndex={-1}
+          ref={menuRef}
           className="bg-neutral-0 menu-shadow absolute right-0 -bottom-2 flex w-62 translate-y-full flex-col gap-1 overflow-hidden rounded-lg border border-neutral-100 dark:border-neutral-500 dark:bg-neutral-600"
         >
-          <li className="flex gap-3 border-b border-neutral-200 px-4 py-3 dark:border-neutral-500">
+          <h2 id={menuTitleId} className="sr-only">
+            User menu
+          </h2>
+
+          <div className="flex gap-3 border-b border-neutral-200 px-4 py-3 dark:border-neutral-500">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="aspect-square min-w-10 rounded-full object-cover"
@@ -57,9 +63,9 @@ export const UserMenu = () => {
                 emily101@gmail.com
               </p>
             </div>
-          </li>
+          </div>
 
-          <li className="px-2 py-1">
+          <div className="px-2 py-1">
             <div className="flex items-center justify-start gap-2.5 px-2 py-2">
               <Palette className="text-neutral-800 dark:text-neutral-100" />
               <label
@@ -71,20 +77,21 @@ export const UserMenu = () => {
 
               <ThemeToggleButton />
             </div>
-          </li>
+          </div>
 
-          <li className="border-t border-neutral-200 hover:bg-neutral-300 dark:border-neutral-500 dark:hover:bg-neutral-500">
+          <div className="border-t border-neutral-200 hover:bg-neutral-300 dark:border-neutral-500 dark:hover:bg-neutral-500">
             <button
               className="flex w-full cursor-pointer gap-2.5 p-4"
               type="button"
+              aria-label="Logout"
             >
               <Logout className="text-neutral-800 dark:text-neutral-100" />
               <span className="text-preset-4 text-neutral-800 dark:text-neutral-100">
                 Logout
               </span>
             </button>
-          </li>
-        </menu>
+          </div>
+        </div>
       )}
     </div>
   )
