@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --neutral-0: #ffffff;
   --neutral-100: #e8f0ef;
@@ -41,17 +43,15 @@
   --color-red-800: var(--red-800);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --neutral-0: #ffffff;
-    --neutral-100: #b1b9b9;
-    --neutral-300: #00706e;
-    --neutral-400: #004746;
-    --neutral-500: #004241;
-    --neutral-600: #002e2d;
-    --neutral-800: #001f1f;
-    --neutral-900: #001414;
-  }
+.dark {
+  --neutral-0: #ffffff;
+  --neutral-100: #b1b9b9;
+  --neutral-300: #00706e;
+  --neutral-400: #004746;
+  --neutral-500: #004241;
+  --neutral-600: #002e2d;
+  --neutral-800: #001f1f;
+  --neutral-900: #001414;
 }
 
 body {
@@ -171,4 +171,48 @@ body {
 
 .bookmark-tags-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(root) {
+    animation-duration: 0.7s;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  ::view-transition-new(root) {
+    animation-name: reveal-light;
+    animation-fill-mode: both;
+  }
+
+  ::view-transition-old(root),
+  .dark::view-transition-old(root) {
+    animation: none;
+    animation-fill-mode: both;
+    z-index: -1;
+  }
+
+  .dark::view-transition-new(root) {
+    animation-name: reveal-dark;
+    animation-fill-mode: both;
+  }
+
+  @keyframes reveal-dark {
+    from {
+      clip-path: polygon(50% -71%, -50% 71%, -50% 71%, 50% -71%);
+    }
+
+    to {
+      clip-path: polygon(50% -71%, -50% 71%, 50% 171%, 171% 50%);
+    }
+  }
+
+  @keyframes reveal-light {
+    from {
+      clip-path: polygon(171% 50%, 50% 171%, 50% 171%, 171% 50%);
+    }
+
+    to {
+      clip-path: polygon(171% 50%, 50% 171%, -50% 71%, 50% -71%);
+    }
+  }
 }

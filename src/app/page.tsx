@@ -7,6 +7,7 @@ import { parseTagsParam } from '@/features/bookmarks/utils/tags'
 import { MenuButton } from '@/components/ui/menu-button'
 import { Sidebar } from '@/components/ui/sidebar'
 
+import { UserMenu } from '@/components/ui/user-menu'
 import {
   BookmarkCard,
   CreateBookmarkDialog,
@@ -50,12 +51,7 @@ export default async function Home({ searchParams }: HomeProps) {
           <div className="flex items-center gap-2.5">
             <CreateBookmarkDialog />
 
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="aspect-square min-h-10 min-w-10 rounded-full object-cover"
-              src="/avatar.png"
-              alt="User avatar"
-            />
+            <UserMenu />
           </div>
         </header>
 
