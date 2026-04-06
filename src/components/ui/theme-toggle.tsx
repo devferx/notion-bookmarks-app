@@ -7,6 +7,24 @@ import { Moon, Sun } from '../icons'
 export const ThemeToggleButton = () => {
   const { theme, setTheme } = useTheme()
 
+  const onToggleTheme = () => {
+    const isDark = theme === 'dark'
+
+    const nextTheme = isDark ? 'light' : 'dark'
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+
+    if (!document.startViewTransition || prefersReducedMotion) {
+      setTheme(nextTheme)
+      return
+    }
+
+    document.startViewTransition(() => {
+      setTheme(nextTheme)
+    })
+  }
+
   return (
     <label htmlFor="theme-toggle" className="inline-block cursor-pointer">
       <input
@@ -14,7 +32,7 @@ export const ThemeToggleButton = () => {
         className="peer sr-only"
         type="checkbox"
         checked={theme === 'dark'}
-        onChange={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+        onChange={onToggleTheme}
       />
 
       <div className="relative flex items-center justify-between rounded-sm bg-neutral-300 p-0.5 dark:bg-neutral-500">
