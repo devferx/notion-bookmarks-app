@@ -1,20 +1,25 @@
 'use client'
 
 import { useTheme } from 'next-themes'
+import { useId } from 'react'
 import type { AriaRole } from 'react'
 
 import { Moon, Sun } from '../icons'
 
 interface ThemeToggleButtonProps {
+  id?: string
   inputRole?: AriaRole
   ariaLabelledBy?: string
 }
 
 export const ThemeToggleButton = ({
+  id,
   inputRole,
   ariaLabelledBy,
 }: ThemeToggleButtonProps) => {
   const { theme, setTheme } = useTheme()
+  const generatedId = useId()
+  const inputId = id ?? generatedId
 
   const onToggleTheme = () => {
     const isDark = theme === 'dark'
@@ -35,9 +40,9 @@ export const ThemeToggleButton = ({
   }
 
   return (
-    <label htmlFor="theme-toggle" className="inline-block cursor-pointer">
+    <label htmlFor={inputId} className="inline-block cursor-pointer">
       <input
-        id="theme-toggle"
+        id={inputId}
         className="peer sr-only"
         type="checkbox"
         checked={theme === 'dark'}

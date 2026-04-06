@@ -11,7 +11,10 @@ import { Logout, Palette } from '../icons'
 export const UserMenu = () => {
   const { isOpen, containerRef, menuRef, triggerRef, menuId, onToggleMenu } =
     useMenu<HTMLDivElement>({ closeOnFocusOut: true })
+
   const menuTitleId = useId()
+  const themeToggleId = useId()
+  const themeToggleLabelId = useId()
 
   return (
     <div className="relative h-10 w-10" ref={containerRef}>
@@ -73,15 +76,16 @@ export const UserMenu = () => {
               <Palette className="text-neutral-800 dark:text-neutral-100" />
               <label
                 className="text-preset-4 flex-1 text-neutral-800 dark:text-neutral-100"
-                htmlFor="theme-toggle"
-                id="theme-toggle-label"
+                htmlFor={themeToggleId}
+                id={themeToggleLabelId}
               >
                 Theme
               </label>
 
               <ThemeToggleButton
+                id={themeToggleId}
                 inputRole="menuitemcheckbox"
-                ariaLabelledBy="theme-toggle-label"
+                ariaLabelledBy={themeToggleLabelId}
               />
             </div>
           </div>
