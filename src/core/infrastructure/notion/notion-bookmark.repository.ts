@@ -39,6 +39,24 @@ export class NotionBookmarkRepository implements BookmarkRepository {
     return this.notionService.getTagsWithCounts()
   }
 
+  async getArchived(): Promise<Bookmark[]> {
+    const dataSourceId = await this.notionService.getPrimaryDataSourceId()
+
+    const rows = await this.notionService.queryPages(dataSourceId, {
+      filter: {
+        property: NOTION_PROPERTIES.Archived,
+        checkbox: { equals: true },
+      },
+      sorts: [
+        { property: NOTION_PROPERTIES.CreatedTime, direction: 'descending' },
+      ],
+      page_size: BOOKMARKS_PAGE_SIZE,
+      result_type: 'page',
+    })
+
+    return mapNotionRowsToBookmarks(rows)
+  }
+
   async create(bookmark: NewBookmark): Promise<void> {
     const dataSourceId = await this.notionService.getPrimaryDataSourceId()
 

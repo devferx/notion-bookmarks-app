@@ -3,6 +3,7 @@ import { NotionService } from './infrastructure/notion/notion.service'
 
 import {
   CreateBookmarkUseCase,
+  GetArchivedBookmarksUseCase,
   GetBookmarksByTagsUseCase,
   GetBookmarksUseCase,
   GetTagsUseCase,
@@ -19,6 +20,9 @@ export const trackVisitUseCase = new TrackBookmarkVisitUseCase(bookmarkRepo)
 export const pinBookmarkUseCase = new PinBookmarkUseCase(bookmarkRepo)
 
 export const getBookmarksUseCase = new GetBookmarksUseCase(bookmarkRepo)
+export const getArchivedBookmarksUseCase = new GetArchivedBookmarksUseCase(
+  bookmarkRepo,
+)
 export const getBookmarksByTagsUseCase = new GetBookmarksByTagsUseCase(
   bookmarkRepo,
 )
