@@ -45,8 +45,9 @@ const getTagsCached = unstable_cache(
 
 export const getCachedBookmarks = (tags: string[]) => {
   const normalizedTags = normalizeTags(tags)
+  const isNormalizedTagsEmpty = normalizedTags.length === 0
 
-  if (normalizedTags.length === 0) {
+  if (isNormalizedTagsEmpty) {
     return getBookmarksCached()
   }
 

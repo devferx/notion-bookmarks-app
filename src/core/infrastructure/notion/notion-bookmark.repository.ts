@@ -6,6 +6,7 @@ import {
   mapNotionRowsToBookmarks,
 } from './mappers'
 import { NotionService } from './notion.service'
+import { NOTION_PROPERTIES } from './constants'
 
 export class NotionBookmarkRepository implements BookmarkRepository {
   constructor(private notionService: NotionService) {}
@@ -14,9 +15,13 @@ export class NotionBookmarkRepository implements BookmarkRepository {
     const dataSourceId = await this.notionService.getPrimaryDataSourceId()
 
     const rows = await this.notionService.queryPages(dataSourceId, {
+      filter: {
+        property: NOTION_PROPERTIES.Archived,
+        checkbox: { equals: false },
+      },
       sorts: [
-        { property: 'Pinned', direction: 'descending' },
-        { property: 'CreatedTime', direction: 'descending' },
+        { property: NOTION_PROPERTIES.Pinned, direction: 'descending' },
+        { property: NOTION_PROPERTIES.CreatedTime, direction: 'descending' },
       ],
       page_size: BOOKMARKS_PAGE_SIZE,
       result_type: 'page',
