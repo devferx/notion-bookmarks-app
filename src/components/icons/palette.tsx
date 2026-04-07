@@ -1,10 +1,6 @@
-import type { SVGProps } from 'react'
+import type { IconProps } from './icon-props.type'
 
-type Props = SVGProps<SVGSVGElement> & {
-  size?: number
-}
-
-export const Palette = ({ size = 16, ...props }: Props) => (
+export const Palette = ({ size = 16, ...props }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 16 16"

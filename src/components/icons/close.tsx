@@ -1,10 +1,6 @@
-import { SVGProps } from 'react'
+import type { IconProps } from './icon-props.type'
 
-type Props = SVGProps<SVGSVGElement> & {
-  size?: number
-}
-
-export const Close = ({ size = 20, ...props }: Props) => (
+export const Close = ({ size = 20, ...props }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 20 20"

@@ -1,8 +1,6 @@
-type Props = React.SVGProps<SVGSVGElement> & {
-  size?: number
-}
+import type { IconProps } from './icon-props.type'
 
-export const Unpin = ({ size = 16, ...props }: Props) => (
+export const Unpin = ({ size = 16, ...props }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}

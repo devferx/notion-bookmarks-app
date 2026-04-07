@@ -1,10 +1,6 @@
-import { SVGProps } from 'react'
+import type { IconProps } from './icon-props.type'
 
-type Props = SVGProps<SVGSVGElement> & {
-  size?: number
-}
-
-export const Add = ({ size = 20, ...props }: Props) => (
+export const Add = ({ size = 20, ...props }: IconProps) => (
   <svg
     width={size}
     height={size}
