@@ -7,12 +7,14 @@ export const THIRTY_MINUTES_IN_SECONDS = 1800 as const
 export const BOOKMARK_CACHE_KEYS = {
   allBookmarks: ['bookmarks', 'all'],
   bookmarksByTags: ['bookmarks', 'by-tags'],
+  archivedBookmarks: ['bookmarks', 'archived'],
   allTags: ['bookmarks', 'all-tags'],
 }
 
 export const BOOKMARK_CACHE_TAGS = {
   bookmarksList: 'bookmarks:list',
   bookmarksTags: 'bookmarks:tags',
+  archivedBookmarksList: 'bookmarks:archived-list',
 } as const
 
 export const BOOKMARK_TAG_SEPARATOR = ',' as const
