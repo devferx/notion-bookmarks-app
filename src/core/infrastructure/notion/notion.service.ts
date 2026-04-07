@@ -112,7 +112,7 @@ export class NotionService {
 
     const filter = tagFilters.length === 1 ? tagFilters[0] : { or: tagFilters }
 
-    return this.queryPages(dataSourceId, {
+    const queryResult = await this.queryPages(dataSourceId, {
       filter,
       sorts: [
         { property: NOTION_PROPERTIES.Pinned, direction: 'descending' },
@@ -121,6 +121,8 @@ export class NotionService {
       page_size: BOOKMARKS_PAGE_SIZE,
       result_type: 'page',
     })
+
+    return queryResult
   }
 
   async queryAllPages(dataSourceId: string, params: QueryPagesParams = {}) {
