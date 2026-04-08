@@ -1,38 +1,27 @@
-import {
-  getCachedBookmarks,
-  getCachedTags,
-} from '@/features/bookmarks/cache/bookmark-cache'
-import { parseTagsParam } from '@/features/bookmarks/utils/tags'
+import type { ReactNode } from 'react'
 
 import { MenuButton } from '@/components/ui/menu-button'
 import { Sidebar } from '@/components/ui/sidebar'
-
 import { UserMenu } from '@/components/ui/user-menu'
+import { getCachedTags } from '@/features/bookmarks/cache/bookmark-cache'
 import {
-  BookmarkCard,
   CreateBookmarkDialog,
   TagFilterSelector,
 } from '@/features/bookmarks/components'
 import { SidebarNavMenu } from '@/features/navigation/components'
 
-interface HomeProps {
-  searchParams: Promise<{ tags?: string }>
+type Props = {
+  children: ReactNode
 }
 
-export default async function Home({ searchParams }: HomeProps) {
-  const { tags: tagsParam } = await searchParams
-  const selectedTags = parseTagsParam(tagsParam)
-
-  const [bookmarks, tags] = await Promise.all([
-    getCachedBookmarks(selectedTags),
-    getCachedTags(),
-  ])
+export default async function BookmarksLayout({ children }: Props) {
+  const tags = await getCachedTags()
 
   return (
     <main className="flex min-h-screen w-full bg-neutral-100 dark:bg-neutral-900">
       <Sidebar>
         <SidebarNavMenu />
-        <TagFilterSelector tags={tags} selectedTags={selectedTags} />
+        <TagFilterSelector tags={tags} />
       </Sidebar>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -55,21 +44,7 @@ export default async function Home({ searchParams }: HomeProps) {
           </div>
         </header>
 
-        <section className="px-4 pt-6 pb-16 md:px-8 md:pt-8">
-          <header className="flex items-center justify-between gap-4">
-            <h2 className="text-preset-1 dark:text-neutral-0 text-neutral-900">
-              {selectedTags.length > 0
-                ? `Bookmarks tagged: ${selectedTags.join(', ')}`
-                : 'All bookmarks'}
-            </h2>
-          </header>
-
-          <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-            {bookmarks.map((bookmark) => (
-              <BookmarkCard key={bookmark.id} bookmark={bookmark} />
-            ))}
-          </div>
-        </section>
+        {children}
       </div>
     </main>
   )
