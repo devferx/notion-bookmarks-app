@@ -8,4 +8,6 @@ export interface BookmarkRepository {
   create(bookmark: NewBookmark): Promise<void>
   trackVisit(bookmarkId: string): Promise<void>
   setPin(bookmarkId: string, isPinned: boolean): Promise<void>
+  setArchive(bookmarkId: string, isArchived: boolean): Promise<void>
+  delete(bookmarkId: string): Promise<void>
 }

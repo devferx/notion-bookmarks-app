@@ -1,4 +1,10 @@
-import { Client } from '@notionhq/client'
+import {
+  Client,
+  type CreatePageResponse,
+  type GetPageResponse,
+  type QueryDataSourceResponse,
+  type UpdatePageResponse,
+} from '@notionhq/client'
 
 import type { Tag } from '@/core/domain/models'
 
@@ -57,22 +63,31 @@ export class NotionService {
     return dataSourceId
   }
 
-  async queryPages(dataSourceId: string, params: QueryPagesParams = {}) {
+  async queryPages(
+    dataSourceId: string,
+    params: QueryPagesParams = {},
+  ): Promise<QueryDataSourceResponse> {
     return this.client.dataSources.query({
       data_source_id: dataSourceId,
       ...params,
     })
   }
 
-  async updatePage(pageId: string, properties: UpdatePageProperties) {
-    await this.client.pages.update({
+  async updatePage(
+    pageId: string,
+    properties: UpdatePageProperties,
+  ): Promise<UpdatePageResponse> {
+    return this.client.pages.update({
       page_id: pageId,
       properties,
     })
   }
 
-  async createPage(dataSourceId: string, properties: CreatePageProperties) {
-    await this.client.pages.create({
+  async createPage(
+    dataSourceId: string,
+    properties: CreatePageProperties,
+  ): Promise<CreatePageResponse> {
+    return this.client.pages.create({
       parent: { data_source_id: dataSourceId },
       properties,
     })
@@ -102,7 +117,7 @@ export class NotionService {
     return property.multi_select.options.map((option) => option.name)
   }
 
-  async queryBookmarksByTags(tags: string[]) {
+  async queryBookmarksByTags(tags: string[]): Promise<QueryDataSourceResponse> {
     const dataSourceId = await this.getPrimaryDataSourceId()
 
     const tagFilters = tags.map((tag) => ({
@@ -172,7 +187,7 @@ export class NotionService {
     return this.buildTagsWithCounts(tagNames, counts)
   }
 
-  async retrievePage(pageId: string) {
+  async retrievePage(pageId: string): Promise<GetPageResponse> {
     return this.client.pages.retrieve({
       page_id: pageId,
     })
@@ -186,5 +201,12 @@ export class NotionService {
       .map((name) => ({ name, count: counts.get(name) ?? 0 }))
       .filter((tag) => tag.count > 0)
       .sort((a, b) => b.count - a.count)
+  }
+
+  async deletePage(pageId: string): Promise<UpdatePageResponse> {
+    return this.client.pages.update({
+      page_id: pageId,
+      in_trash: true,
+    })
   }
 }

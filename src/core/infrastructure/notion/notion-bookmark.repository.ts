@@ -90,4 +90,14 @@ export class NotionBookmarkRepository implements BookmarkRepository {
       Pinned: { checkbox: isPinned },
     })
   }
+
+  async setArchive(bookmarkId: string, isArchived: boolean): Promise<void> {
+    await this.notionService.updatePage(bookmarkId, {
+      Archived: { checkbox: isArchived },
+    })
+  }
+
+  async delete(bookmarkId: string): Promise<void> {
+    await this.notionService.deletePage(bookmarkId)
+  }
 }
