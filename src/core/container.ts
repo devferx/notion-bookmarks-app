@@ -3,15 +3,15 @@ import { NotionService } from './infrastructure/notion/notion.service'
 
 import {
   CreateBookmarkUseCase,
+  DeleteBookmarkUseCase,
   GetArchivedBookmarksUseCase,
   GetBookmarksByTagsUseCase,
   GetBookmarksUseCase,
   GetTagsUseCase,
   PinBookmarkUseCase,
   TrackBookmarkVisitUseCase,
+  UpdateBookmarkArchiveStatusUseCase,
 } from './use-cases/bookmarks'
-import { DeleteBookmarkUseCase } from './use-cases/bookmarks/delete-bookmark.use-case'
-import { UpdateBookmarkArchiveStatusUseCase } from './use-cases/bookmarks/update-bookmark-archive-status.use-case'
 
 const notionService = new NotionService()
 const bookmarkRepo = new NotionBookmarkRepository(notionService)
