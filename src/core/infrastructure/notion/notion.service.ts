@@ -125,7 +125,17 @@ export class NotionService {
       multi_select: { contains: tag },
     }))
 
-    const filter = tagFilters.length === 1 ? tagFilters[0] : { or: tagFilters }
+    const archivedFilter = {
+      property: NOTION_PROPERTIES.Archived,
+      checkbox: { equals: false },
+    }
+
+    const tagFilter =
+      tagFilters.length === 1 ? tagFilters[0] : { or: tagFilters }
+
+    const filter = {
+      and: [archivedFilter, tagFilter],
+    }
 
     const queryResult = await this.queryPages(dataSourceId, {
       filter,
