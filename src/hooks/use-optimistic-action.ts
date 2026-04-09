@@ -70,6 +70,12 @@ export function useOptimisticAction<TState extends { isPending: boolean }>(
 
       onError?.()
     } finally {
+      startTransition(() => {
+        setState({
+          isPending: false,
+        } as Partial<TState>)
+      })
+
       onFinally?.()
     }
   }
