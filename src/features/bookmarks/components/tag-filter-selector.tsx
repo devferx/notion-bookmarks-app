@@ -1,15 +1,19 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
+
 import type { Tag } from '@/core/domain/models'
 import { useTagFilter } from '@/features/bookmarks/hooks'
+import { parseTagsParam } from '@/features/bookmarks/utils/tags'
 
 interface TagListProps {
   tags: Tag[]
-  selectedTags: string[]
 }
 
-export const TagFilterSelector = ({ tags, selectedTags }: TagListProps) => {
+export const TagFilterSelector = ({ tags }: TagListProps) => {
   const { onToggleTag, onResetTags } = useTagFilter()
+  const searchParams = useSearchParams()
+  const selectedTags = parseTagsParam(searchParams.get('tags') ?? undefined)
 
   return (
     <section className="bookmark-tags-scrollbar flex-1 overflow-y-auto px-4 pb-5">

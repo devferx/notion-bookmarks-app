@@ -1,6 +1,7 @@
 import { unstable_cache } from 'next/cache'
 
 import {
+  getArchivedBookmarksUseCase,
   getBookmarksByTagsUseCase,
   getBookmarksUseCase,
   getTagsUseCase,
@@ -20,6 +21,15 @@ const getBookmarksCached = unstable_cache(
   {
     revalidate: TEN_MINUTES_IN_SECONDS,
     tags: [BOOKMARK_CACHE_TAGS.bookmarksList],
+  },
+)
+
+const getArchivedBookmarksCached = unstable_cache(
+  async () => getArchivedBookmarksUseCase.execute(),
+  BOOKMARK_CACHE_KEYS.archivedBookmarks,
+  {
+    revalidate: TEN_MINUTES_IN_SECONDS,
+    tags: [BOOKMARK_CACHE_TAGS.archivedBookmarksList],
   },
 )
 
@@ -45,12 +55,19 @@ const getTagsCached = unstable_cache(
 
 export const getCachedBookmarks = (tags: string[]) => {
   const normalizedTags = normalizeTags(tags)
+  const isNormalizedTagsEmpty = normalizedTags.length === 0
 
-  if (normalizedTags.length === 0) {
+  if (isNormalizedTagsEmpty) {
     return getBookmarksCached()
   }
 
   return getBookmarksByTagsCached(normalizedTags)
 }
 
-export const getCachedTags = () => getTagsCached()
+export const getCachedTags = () => {
+  return getTagsCached()
+}
+
+export const getCachedArchivedBookmarks = () => {
+  return getArchivedBookmarksCached()
+}

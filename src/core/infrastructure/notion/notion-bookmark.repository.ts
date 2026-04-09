@@ -6,6 +6,7 @@ import {
   mapNotionRowsToBookmarks,
 } from './mappers'
 import { NotionService } from './notion.service'
+import { NOTION_PROPERTIES } from './constants'
 
 export class NotionBookmarkRepository implements BookmarkRepository {
   constructor(private notionService: NotionService) {}
@@ -14,9 +15,13 @@ export class NotionBookmarkRepository implements BookmarkRepository {
     const dataSourceId = await this.notionService.getPrimaryDataSourceId()
 
     const rows = await this.notionService.queryPages(dataSourceId, {
+      filter: {
+        property: NOTION_PROPERTIES.Archived,
+        checkbox: { equals: false },
+      },
       sorts: [
-        { property: 'Pinned', direction: 'descending' },
-        { property: 'CreatedTime', direction: 'descending' },
+        { property: NOTION_PROPERTIES.Pinned, direction: 'descending' },
+        { property: NOTION_PROPERTIES.CreatedTime, direction: 'descending' },
       ],
       page_size: BOOKMARKS_PAGE_SIZE,
       result_type: 'page',
@@ -32,6 +37,24 @@ export class NotionBookmarkRepository implements BookmarkRepository {
 
   async getAllTags(): Promise<Tag[]> {
     return this.notionService.getTagsWithCounts()
+  }
+
+  async getArchived(): Promise<Bookmark[]> {
+    const dataSourceId = await this.notionService.getPrimaryDataSourceId()
+
+    const rows = await this.notionService.queryPages(dataSourceId, {
+      filter: {
+        property: NOTION_PROPERTIES.Archived,
+        checkbox: { equals: true },
+      },
+      sorts: [
+        { property: NOTION_PROPERTIES.CreatedTime, direction: 'descending' },
+      ],
+      page_size: BOOKMARKS_PAGE_SIZE,
+      result_type: 'page',
+    })
+
+    return mapNotionRowsToBookmarks(rows)
   }
 
   async create(bookmark: NewBookmark): Promise<void> {
@@ -66,5 +89,15 @@ export class NotionBookmarkRepository implements BookmarkRepository {
     await this.notionService.updatePage(bookmarkId, {
       Pinned: { checkbox: isPinned },
     })
+  }
+
+  async setArchive(bookmarkId: string, isArchived: boolean): Promise<void> {
+    await this.notionService.updatePage(bookmarkId, {
+      Archived: { checkbox: isArchived },
+    })
+  }
+
+  async delete(bookmarkId: string): Promise<void> {
+    await this.notionService.deletePage(bookmarkId)
   }
 }

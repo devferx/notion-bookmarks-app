@@ -1,14 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
-import { startTransition, useOptimistic } from 'react'
+import clsx from 'clsx'
 import { toast } from 'sonner'
 
 import type { Bookmark } from '@/core/domain/models/bookmark'
 import { formatBookmarkDate } from '@/core/utils'
 
-import { setBookmarkPin, trackBookmarkVisit } from '@/actions/bookmark'
 import {
+  setBookmarkPin,
+  trackBookmarkVisit,
+  deleteBookmark,
+  setBookmarkArchive,
+} from '@/actions/bookmark'
+import {
+  Archive,
   Calendar,
   Clock,
   Copy,
@@ -16,17 +22,24 @@ import {
   Eye,
   LinkExternal,
   Pin,
+  Refresh,
+  Trash,
   Unpin,
 } from '@/components/icons'
 
 import { useMenu } from '@/hooks/use-menu'
+import { useOptimisticAction } from '@/hooks/use-optimistic-action'
 
 type Props = {
   bookmark: Bookmark
 }
 
 export const BookmarkCard = ({ bookmark }: Props) => {
-  const [isPinned, setOptimisticPinned] = useOptimistic(bookmark.pinned)
+  const { optimisticState, runOptimisticAction } = useOptimisticAction({
+    isArchived: bookmark.isArchived,
+    isPending: false,
+    isPinned: bookmark.pinned,
+  })
 
   const {
     containerRef: menuContainerRef,
@@ -71,57 +84,63 @@ export const BookmarkCard = ({ bookmark }: Props) => {
   }
 
   const onPinBookmark = () => {
-    const previousPinned = isPinned
-
-    startTransition(() => {
-      setOptimisticPinned(true)
+    void runOptimisticAction({
+      action: () => setBookmarkPin(bookmark.id, true),
+      errorIcon: <Pin size={16} />,
+      errorMessage: 'Failed to pin bookmark. Please try again.',
+      onFinally: closeMenu,
+      optimisticUpdate: { isPinned: true },
     })
-
-    setBookmarkPin(bookmark.id, true)
-      .catch(() => {
-        startTransition(() => {
-          setOptimisticPinned(previousPinned)
-        })
-        toast('Failed to pin bookmark. Please try again.', {
-          icon: <Pin size={16} />,
-          classNames: {
-            title: 'text-preset-4-medium text-neutral-900',
-          },
-        })
-      })
-      .finally(() => {
-        closeMenu()
-      })
   }
 
   const onUnpinBookmark = () => {
-    const previousPinned = isPinned
-
-    startTransition(() => {
-      setOptimisticPinned(false)
+    void runOptimisticAction({
+      action: () => setBookmarkPin(bookmark.id, false),
+      errorIcon: <Unpin size={16} />,
+      errorMessage: 'Failed to unpin bookmark. Please try again.',
+      onFinally: closeMenu,
+      optimisticUpdate: { isPinned: false },
     })
+  }
 
-    setBookmarkPin(bookmark.id, false)
-      .catch(() => {
-        startTransition(() => {
-          setOptimisticPinned(previousPinned)
-        })
-        toast('Failed to unpin bookmark. Please try again.', {
-          icon: <Unpin size={16} />,
-          classNames: {
-            title: 'text-preset-4-medium text-neutral-900',
-          },
-        })
-      })
-      .finally(() => {
-        closeMenu()
-      })
+  const onArchiveBookmark = () => {
+    void runOptimisticAction({
+      action: () => setBookmarkArchive(bookmark.id, true),
+      errorIcon: <Archive size={16} />,
+      errorMessage: 'Failed to archive bookmark. Please try again.',
+      onFinally: closeMenu,
+      optimisticUpdate: { isArchived: true },
+    })
+  }
+
+  const onUnarchiveBookmark = () => {
+    void runOptimisticAction({
+      action: () => setBookmarkArchive(bookmark.id, false),
+      errorIcon: <Refresh size={16} />,
+      errorMessage: 'Failed to unarchive bookmark. Please try again.',
+      onFinally: closeMenu,
+      optimisticUpdate: { isArchived: false },
+    })
+  }
+
+  const onDeleteBookmark = () => {
+    void runOptimisticAction({
+      action: () => deleteBookmark(bookmark.id),
+      errorIcon: <Trash size={16} />,
+      errorMessage: 'Failed to delete bookmark. Please try again.',
+      onFinally: closeMenu,
+      optimisticUpdate: {},
+    })
   }
 
   return (
     <article
-      className="bg-neutral-0 card-shadow flex flex-col gap-4 rounded-[10px] dark:bg-neutral-800"
+      className={clsx(
+        'bg-neutral-0 card-shadow flex flex-col gap-4 rounded-[10px] transition-opacity dark:bg-neutral-800',
+        optimisticState.isPending && 'pointer-events-none opacity-50',
+      )}
       key={bookmark.id}
+      aria-busy={optimisticState.isPending}
     >
       <header className="flex items-start gap-4 px-4 pt-4">
         <img
@@ -193,7 +212,7 @@ export const BookmarkCard = ({ bookmark }: Props) => {
                 </span>
               </button>
 
-              {!isPinned && (
+              {!optimisticState.isPinned && (
                 <button
                   className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100 dark:bg-neutral-600 dark:hover:bg-neutral-500"
                   type="button"
@@ -210,7 +229,7 @@ export const BookmarkCard = ({ bookmark }: Props) => {
                 </button>
               )}
 
-              {isPinned && (
+              {optimisticState.isPinned && (
                 <button
                   className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100 dark:bg-neutral-600 dark:hover:bg-neutral-500"
                   type="button"
@@ -225,6 +244,51 @@ export const BookmarkCard = ({ bookmark }: Props) => {
                     Unpin
                   </span>
                 </button>
+              )}
+
+              {!optimisticState.isArchived && (
+                <button
+                  className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100 dark:bg-neutral-600 dark:hover:bg-neutral-500"
+                  type="button"
+                  role="menuitem"
+                  onClick={onArchiveBookmark}
+                >
+                  <Archive
+                    size={16}
+                    className="text-neutral-800 dark:text-neutral-100"
+                  />
+                  <span className="text-preset-4 text-neutral-800 dark:text-neutral-100">
+                    Archive
+                  </span>
+                </button>
+              )}
+
+              {optimisticState.isArchived && (
+                <>
+                  <button
+                    className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100 dark:bg-neutral-600 dark:hover:bg-neutral-500"
+                    type="button"
+                    role="menuitem"
+                    onClick={onUnarchiveBookmark}
+                  >
+                    <Refresh className="text-neutral-800 dark:text-neutral-100" />
+                    <span className="text-preset-4 text-neutral-800 dark:text-neutral-100">
+                      Unarchive
+                    </span>
+                  </button>
+
+                  <button
+                    className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100 dark:bg-neutral-600 dark:hover:bg-neutral-500"
+                    type="button"
+                    role="menuitem"
+                    onClick={onDeleteBookmark}
+                  >
+                    <Trash className="text-neutral-800 dark:text-neutral-100" />
+                    <span className="text-preset-4 text-neutral-800 dark:text-neutral-100">
+                      Delete Permanently
+                    </span>
+                  </button>
+                </>
               )}
             </div>
           )}
@@ -282,7 +346,7 @@ export const BookmarkCard = ({ bookmark }: Props) => {
 
         <div className="flex-1" />
 
-        {isPinned && (
+        {optimisticState.isPinned && (
           <Pin size={18} className="text-neutral-800 dark:text-neutral-100" />
         )}
       </footer>
