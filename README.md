@@ -40,6 +40,7 @@ The application reads and writes bookmarks directly to a Notion database through
 - Show favicon, domain, tags, creation date, and usage metadata for each bookmark
 - Use a responsive sidebar layout with a mobile menu
 - Display loading skeletons while bookmark data is being fetched
+- Browse archived bookmarks on a dedicated page
 
 ## Tech stack
 
@@ -118,5 +119,4 @@ Behavior notes:
 The codebase already includes some UI affordances that are not fully wired yet:
 
 - The search input is present in the header, but bookmark searching by title is not connected to the data query yet.
-- The sidebar includes an `Archived` entry, but there is not a dedicated archived bookmarks route yet.
 - Dark mode styles exist in the UI, but a theme toggle is not currently implemented.
