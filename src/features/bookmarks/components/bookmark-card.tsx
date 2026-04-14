@@ -19,6 +19,7 @@ import {
   Clock,
   Copy,
   DotsVertical,
+  Edit,
   Eye,
   LinkExternal,
   Pin,
@@ -132,6 +133,8 @@ export const BookmarkCard = ({ bookmark }: Props) => {
       optimisticUpdate: {},
     })
   }
+
+  const onEditBookmark = () => {}
 
   return (
     <article
@@ -247,20 +250,37 @@ export const BookmarkCard = ({ bookmark }: Props) => {
               )}
 
               {!optimisticState.isArchived && (
-                <button
-                  className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100 dark:bg-neutral-600 dark:hover:bg-neutral-500"
-                  type="button"
-                  role="menuitem"
-                  onClick={onArchiveBookmark}
-                >
-                  <Archive
-                    size={16}
-                    className="text-neutral-800 dark:text-neutral-100"
-                  />
-                  <span className="text-preset-4 text-neutral-800 dark:text-neutral-100">
-                    Archive
-                  </span>
-                </button>
+                <>
+                  <button
+                    className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100 dark:bg-neutral-600 dark:hover:bg-neutral-500"
+                    type="button"
+                    role="menuitem"
+                    onClick={onEditBookmark}
+                  >
+                    <Edit
+                      size={16}
+                      className="text-neutral-800 dark:text-neutral-100"
+                    />
+                    <span className="text-preset-4 text-neutral-800 dark:text-neutral-100">
+                      Edit
+                    </span>
+                  </button>
+
+                  <button
+                    className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100 dark:bg-neutral-600 dark:hover:bg-neutral-500"
+                    type="button"
+                    role="menuitem"
+                    onClick={onArchiveBookmark}
+                  >
+                    <Archive
+                      size={16}
+                      className="text-neutral-800 dark:text-neutral-100"
+                    />
+                    <span className="text-preset-4 text-neutral-800 dark:text-neutral-100">
+                      Archive
+                    </span>
+                  </button>
+                </>
               )}
 
               {optimisticState.isArchived && (
