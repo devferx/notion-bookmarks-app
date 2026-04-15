@@ -12,11 +12,13 @@ import {
 } from '@/features/bookmarks/components/bookmark-dialog'
 import { BookmarkForm } from './bookmark-form'
 
-type EditBookmarkDialogProps = {
+type EditBookmarkDialogTriggerProps = {
   onOpen?: () => void
 }
 
-export const EditBookmarkDialog = ({ onOpen }: EditBookmarkDialogProps) => {
+export const EditBookmarkDialogTrigger = ({
+  onOpen,
+}: EditBookmarkDialogTriggerProps) => {
   return (
     <BookmarkDialogTrigger
       className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100 dark:bg-neutral-600 dark:hover:bg-neutral-500"
