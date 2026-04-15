@@ -32,7 +32,10 @@ import {
   Unpin,
 } from '@/components/icons'
 import { BookmarkDialog } from './bookmark-dialog'
-import { EditBookmarkDialog } from './edit-bookmark-dialog'
+import {
+  EditBookmarkDialog,
+  EditBookmarkDialogContent,
+} from './edit-bookmark-dialog'
 
 type Props = {
   bookmark: Bookmark
@@ -253,10 +256,7 @@ export const BookmarkCard = ({ bookmark }: Props) => {
 
                 {!optimisticState.isArchived && (
                   <>
-                    <EditBookmarkDialog
-                      bookmark={bookmark}
-                      onOpen={closeMenu}
-                    />
+                    <EditBookmarkDialog onOpen={closeMenu} />
 
                     <button
                       className="bg-neutral-0 flex w-full cursor-pointer items-center gap-2.5 rounded-md p-2 hover:bg-neutral-100 dark:bg-neutral-600 dark:hover:bg-neutral-500"
@@ -362,6 +362,8 @@ export const BookmarkCard = ({ bookmark }: Props) => {
             <Pin size={18} className="text-neutral-800 dark:text-neutral-100" />
           )}
         </footer>
+
+        <EditBookmarkDialogContent bookmark={bookmark} />
       </article>
     </BookmarkDialog>
   )
