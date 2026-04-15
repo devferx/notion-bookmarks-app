@@ -2,16 +2,26 @@
 
 import { revalidatePath, revalidateTag } from 'next/cache'
 
-import { BOOKMARK_CACHE_TAGS } from '@/core/constants/bookmark'
 import {
   createBookmarkUseCase,
   deleteBookmarkUseCase,
   pinBookmarkUseCase,
-  updateBookmarkArchiveStatusUseCase,
   trackVisitUseCase,
+  updateBookmarkArchiveStatusUseCase,
+  updateBookmarkUseCase,
 } from '@/core/container'
-import type { CreateBookmarkInput } from '@/core/use-cases/bookmarks'
-import { createBookmarkSchema } from '@/features/bookmarks/schemas'
+
+import type {
+  CreateBookmarkInput,
+  UpdateBookmarkInput,
+} from '@/core/use-cases/bookmarks'
+
+import {
+  createBookmarkSchema,
+  updateBookmarkSchema,
+} from '@/features/bookmarks/schemas'
+
+import { BOOKMARK_CACHE_TAGS } from '@/core/constants/bookmark'
 
 export const createBookmark = async (payload: CreateBookmarkInput) => {
   const parsedPayload = createBookmarkSchema.parse(payload)
@@ -20,6 +30,20 @@ export const createBookmark = async (payload: CreateBookmarkInput) => {
   revalidateTag(BOOKMARK_CACHE_TAGS.bookmarksList, 'max')
   revalidateTag(BOOKMARK_CACHE_TAGS.bookmarksTags, 'max')
   revalidatePath('/')
+}
+
+export const updateBookmark = async (
+  bookmarkId: string,
+  payload: UpdateBookmarkInput,
+) => {
+  const parsedPayload = updateBookmarkSchema.parse(payload)
+
+  await updateBookmarkUseCase.execute(bookmarkId, parsedPayload)
+  revalidateTag(BOOKMARK_CACHE_TAGS.bookmarksList, 'max')
+  revalidateTag(BOOKMARK_CACHE_TAGS.bookmarksTags, 'max')
+  revalidateTag(BOOKMARK_CACHE_TAGS.archivedBookmarksList, 'max')
+  revalidatePath('/')
+  revalidatePath('/archived')
 }
 
 export const trackBookmarkVisit = async (bookmarkId: string) => {

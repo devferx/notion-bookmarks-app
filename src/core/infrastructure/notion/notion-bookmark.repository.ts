@@ -1,11 +1,20 @@
-import { BOOKMARKS_PAGE_SIZE } from '@/core/constants/bookmark'
-import type { Bookmark, NewBookmark, Tag } from '@/core/domain/models'
+import type {
+  Bookmark,
+  NewBookmark,
+  Tag,
+  UpdateBookmark,
+} from '@/core/domain/models'
+
 import type { BookmarkRepository } from '@/core/domain/repositories/bookmark.repository'
+
+import { NotionService } from './notion.service'
+
 import {
   mapNewBookmarkToNotionProperties,
   mapNotionRowsToBookmarks,
 } from './mappers'
-import { NotionService } from './notion.service'
+
+import { BOOKMARKS_PAGE_SIZE } from '@/core/constants/bookmark'
 import { NOTION_PROPERTIES } from './constants'
 
 export class NotionBookmarkRepository implements BookmarkRepository {
@@ -64,6 +73,21 @@ export class NotionBookmarkRepository implements BookmarkRepository {
       dataSourceId,
       mapNewBookmarkToNotionProperties(bookmark),
     )
+  }
+
+  async update(bookmarkId: string, bookmark: UpdateBookmark): Promise<void> {
+    await this.notionService.updatePage(bookmarkId, {
+      Title: {
+        title: [{ type: 'text', text: { content: bookmark.title } }],
+      },
+      URL: { url: bookmark.url },
+      Description: {
+        rich_text: [{ type: 'text', text: { content: bookmark.description } }],
+      },
+      Tags: {
+        multi_select: bookmark.tags.map((tag) => ({ name: tag })),
+      },
+    })
   }
 
   async trackVisit(bookmarkId: string): Promise<void> {
