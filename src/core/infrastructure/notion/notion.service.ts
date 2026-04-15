@@ -13,7 +13,7 @@ import { computeTagCounts } from '@/core/infrastructure/notion/mappers'
 import { BOOKMARKS_PAGE_SIZE } from '@/core/constants/bookmark'
 import { NOTION_PROPERTIES } from '@/core/infrastructure/notion/constants'
 
-type UpdatePageProperties = NonNullable<
+export type UpdatePageProperties = NonNullable<
   Parameters<Client['pages']['update']>[0]['properties']
 >
 export type CreatePageProperties = NonNullable<

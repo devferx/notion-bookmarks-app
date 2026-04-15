@@ -1,4 +1,5 @@
 export * from './bookmark-card'
 export * from './bookmark-form'
 export * from './create-bookmark-dialog'
+export * from './edit-bookmark-dialog'
 export * from './tag-filter-selector'

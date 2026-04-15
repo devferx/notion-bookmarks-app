@@ -11,6 +11,7 @@ import {
   PinBookmarkUseCase,
   TrackBookmarkVisitUseCase,
   UpdateBookmarkArchiveStatusUseCase,
+  UpdateBookmarkUseCase,
 } from './use-cases/bookmarks'
 
 const notionService = new NotionService()
@@ -22,6 +23,7 @@ export const getTagsUseCase = new GetTagsUseCase(bookmarkRepo)
 export const pinBookmarkUseCase = new PinBookmarkUseCase(bookmarkRepo)
 export const updateBookmarkArchiveStatusUseCase =
   new UpdateBookmarkArchiveStatusUseCase(bookmarkRepo)
+export const updateBookmarkUseCase = new UpdateBookmarkUseCase(bookmarkRepo)
 export const trackVisitUseCase = new TrackBookmarkVisitUseCase(bookmarkRepo)
 
 export const getBookmarksUseCase = new GetBookmarksUseCase(bookmarkRepo)
