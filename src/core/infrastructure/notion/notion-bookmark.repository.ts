@@ -12,6 +12,7 @@ import { NotionService } from './notion.service'
 import {
   mapNewBookmarkToNotionProperties,
   mapNotionRowsToBookmarks,
+  mapUpdateBookmarkToNotionProperties,
 } from './mappers'
 
 import { BOOKMARKS_PAGE_SIZE } from '@/core/constants/bookmark'
@@ -76,18 +77,10 @@ export class NotionBookmarkRepository implements BookmarkRepository {
   }
 
   async update(bookmarkId: string, bookmark: UpdateBookmark): Promise<void> {
-    await this.notionService.updatePage(bookmarkId, {
-      Title: {
-        title: [{ type: 'text', text: { content: bookmark.title } }],
-      },
-      URL: { url: bookmark.url },
-      Description: {
-        rich_text: [{ type: 'text', text: { content: bookmark.description } }],
-      },
-      Tags: {
-        multi_select: bookmark.tags.map((tag) => ({ name: tag })),
-      },
-    })
+    await this.notionService.updatePage(
+      bookmarkId,
+      mapUpdateBookmarkToNotionProperties(bookmark),
+    )
   }
 
   async trackVisit(bookmarkId: string): Promise<void> {

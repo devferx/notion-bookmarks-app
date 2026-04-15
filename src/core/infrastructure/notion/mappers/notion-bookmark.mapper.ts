@@ -1,6 +1,9 @@
-import { Bookmark, NewBookmark } from '@/core/domain/models'
+import { Bookmark, NewBookmark, UpdateBookmark } from '@/core/domain/models'
 
-import type { CreatePageProperties } from '@/core/infrastructure/notion/notion.service'
+import type {
+  CreatePageProperties,
+  UpdatePageProperties,
+} from '@/core/infrastructure/notion/notion.service'
 
 import { normalizeUrl, toDomain, toFaviconUrl } from '@/core/utils'
 import { extractRichText, isNotionPageRow } from '../utils/notion-parsing.utils'
@@ -28,6 +31,23 @@ export function mapNewBookmarkToNotionProperties(
     VisitCount: { number: bookmark.visitCount },
     LastVisited: {
       date: bookmark.lastVisited ? { start: bookmark.lastVisited } : null,
+    },
+  }
+}
+
+export function mapUpdateBookmarkToNotionProperties(
+  bookmark: UpdateBookmark,
+): UpdatePageProperties {
+  return {
+    Title: {
+      title: [{ type: 'text', text: { content: bookmark.title } }],
+    },
+    URL: { url: bookmark.url },
+    Description: {
+      rich_text: [{ type: 'text', text: { content: bookmark.description } }],
+    },
+    Tags: {
+      multi_select: bookmark.tags.map((tag) => ({ name: tag })),
     },
   }
 }
