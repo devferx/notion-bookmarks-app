@@ -3,23 +3,31 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useWatch } from 'react-hook-form'
 
-import { Close } from '@/components/icons'
-
 import {
   bookmarkFormSchema,
   type BookmarkFormValues,
 } from '@/features/bookmarks/schemas/bookmark-form.schema'
 
+import { Close } from '@/components/icons'
+
 import { BOOKMARK_DESCRIPTION_MAX_LENGTH } from '@/core/constants/bookmark'
 
 interface BookmarkFormProps {
   defaultValues?: BookmarkFormValues
+  formDescription?: string
+  formTitle?: string
+  submitLabel?: string
+  submittingLabel?: string
   onClose?: () => void
   onSubmit: (values: BookmarkFormValues) => Promise<void>
 }
 
 export const BookmarkForm = ({
   defaultValues,
+  formDescription = 'Save a link with details to keep your collection organized.',
+  formTitle = 'Add a Bookmark',
+  submitLabel = 'Add Bookmark',
+  submittingLabel = 'Saving...',
   onClose = () => {},
   onSubmit,
 }: BookmarkFormProps) => {
@@ -59,10 +67,10 @@ export const BookmarkForm = ({
 
       <div className="flex flex-col gap-2">
         <h3 className="text-preset-1 dark:text-neutral-0 text-neutral-900">
-          Add a Bookmark
+          {formTitle}
         </h3>
         <p className="text-preset-4-medium text-neutral-800 dark:text-neutral-100">
-          Save a link with details to keep your collection organized.
+          {formDescription}
         </p>
       </div>
 
@@ -180,7 +188,7 @@ export const BookmarkForm = ({
           type="submit"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Saving...' : 'Add Bookmark'}
+          {isSubmitting ? submittingLabel : submitLabel}
         </button>
       </div>
     </form>
