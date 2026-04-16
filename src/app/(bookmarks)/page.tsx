@@ -1,3 +1,4 @@
+import { SortMenu } from '@/components/ui/sort-menu'
 import { getCachedBookmarks } from '@/features/bookmarks/cache/bookmark-cache'
 import { BookmarkCard } from '@/features/bookmarks/components'
 import { parseTagsParam } from '@/features/bookmarks/utils/tags'
@@ -19,6 +20,8 @@ export default async function Home({ searchParams }: HomeProps) {
             ? `Bookmarks tagged: ${selectedTags.join(', ')}`
             : 'All bookmarks'}
         </h2>
+
+        <SortMenu />
       </header>
 
       <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
