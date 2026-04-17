@@ -3,4 +3,6 @@ export const NOTION_PROPERTIES = {
   Pinned: 'Pinned',
   Archived: 'Archived',
   CreatedTime: 'CreatedTime',
+  LastVisited: 'LastVisited',
+  VisitCount: 'VisitCount',
 } as const
