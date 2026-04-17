@@ -1,16 +1,22 @@
-import { SortMenu } from '@/components/ui/sort-menu'
 import { getCachedBookmarks } from '@/features/bookmarks/cache/bookmark-cache'
+
+import { SortMenu } from '@/components/ui/sort-menu'
 import { BookmarkCard } from '@/features/bookmarks/components'
+
+import { parseBookmarkSort } from '@/features/bookmarks/utils/bookmark-sort'
 import { parseTagsParam } from '@/features/bookmarks/utils/tags'
 
 interface HomeProps {
-  searchParams: Promise<{ tags?: string }>
+  searchParams: Promise<{ sort?: string; tags?: string }>
 }
 
 export default async function Home({ searchParams }: HomeProps) {
-  const { tags: tagsParam } = await searchParams
+  const { tags: tagsParam, sort: sortParam } = await searchParams
+
   const selectedTags = parseTagsParam(tagsParam)
-  const bookmarks = await getCachedBookmarks(selectedTags)
+  const selectedSort = parseBookmarkSort(sortParam)
+
+  const bookmarks = await getCachedBookmarks(selectedTags, selectedSort)
 
   return (
     <section className="px-4 pt-6 pb-16 md:px-8 md:pt-8">
