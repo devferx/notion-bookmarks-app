@@ -1,6 +1,7 @@
 export * from './add'
 export * from './archive'
 export * from './calendar'
+export * from './check'
 export * from './clock'
 export * from './close'
 export * from './copy'
