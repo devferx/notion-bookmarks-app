@@ -1,14 +1,15 @@
 import type {
   Bookmark,
+  BookmarkSort,
   NewBookmark,
   Tag,
   UpdateBookmark,
 } from '@/core/domain/models'
 
 export interface BookmarkRepository {
-  getAll(): Promise<Bookmark[]>
-  getArchived(): Promise<Bookmark[]>
-  getByTags(tags: string[]): Promise<Bookmark[]>
+  getAll(sort: BookmarkSort): Promise<Bookmark[]>
+  getArchived(sort: BookmarkSort): Promise<Bookmark[]>
+  getByTags(tags: string[], sort: BookmarkSort): Promise<Bookmark[]>
   getAllTags(): Promise<Tag[]>
   create(bookmark: NewBookmark): Promise<void>
   update(bookmarkId: string, bookmark: UpdateBookmark): Promise<void>

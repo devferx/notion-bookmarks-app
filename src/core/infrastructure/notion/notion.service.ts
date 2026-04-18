@@ -117,7 +117,10 @@ export class NotionService {
     return property.multi_select.options.map((option) => option.name)
   }
 
-  async queryBookmarksByTags(tags: string[]): Promise<QueryDataSourceResponse> {
+  async queryBookmarksByTags(
+    tags: string[],
+    sorts?: QueryPagesParams['sorts'],
+  ): Promise<QueryDataSourceResponse> {
     const dataSourceId = await this.getPrimaryDataSourceId()
 
     const tagFilters = tags.map((tag) => ({
@@ -139,10 +142,7 @@ export class NotionService {
 
     const queryResult = await this.queryPages(dataSourceId, {
       filter,
-      sorts: [
-        { property: NOTION_PROPERTIES.Pinned, direction: 'descending' },
-        { property: NOTION_PROPERTIES.CreatedTime, direction: 'descending' },
-      ],
+      sorts,
       page_size: BOOKMARKS_PAGE_SIZE,
       result_type: 'page',
     })

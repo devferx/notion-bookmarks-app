@@ -1,10 +1,14 @@
+import { DEFAULT_BOOKMARK_SORT } from '@/core/constants/bookmark'
+import { type Bookmark, type BookmarkSort } from '@/core/domain/models'
 import type { BookmarkRepository } from '@/core/domain/repositories'
-import type { Bookmark } from '@/core/domain/models'
 
 export class GetBookmarksByTagsUseCase {
   constructor(private repository: BookmarkRepository) {}
 
-  execute(tags: string[]): Promise<Bookmark[]> {
-    return this.repository.getByTags(tags)
+  execute(
+    tags: string[],
+    sort: BookmarkSort = DEFAULT_BOOKMARK_SORT,
+  ): Promise<Bookmark[]> {
+    return this.repository.getByTags(tags, sort)
   }
 }

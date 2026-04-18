@@ -1,5 +1,7 @@
 import { unstable_cache } from 'next/cache'
 
+import { type BookmarkSort } from '@/core/domain/models'
+
 import {
   getArchivedBookmarksUseCase,
   getBookmarksByTagsUseCase,
@@ -9,6 +11,7 @@ import {
 import {
   BOOKMARK_CACHE_KEYS,
   BOOKMARK_CACHE_TAGS,
+  DEFAULT_BOOKMARK_SORT,
   TEN_MINUTES_IN_SECONDS,
   THIRTY_MINUTES_IN_SECONDS,
 } from '@/core/constants/bookmark'
@@ -16,7 +19,7 @@ import {
 import { normalizeTags } from '@/features/bookmarks/utils/tags'
 
 const getBookmarksCached = unstable_cache(
-  async () => getBookmarksUseCase.execute(),
+  async (sort: BookmarkSort) => getBookmarksUseCase.execute(sort),
   BOOKMARK_CACHE_KEYS.allBookmarks,
   {
     revalidate: TEN_MINUTES_IN_SECONDS,
@@ -25,7 +28,7 @@ const getBookmarksCached = unstable_cache(
 )
 
 const getArchivedBookmarksCached = unstable_cache(
-  async () => getArchivedBookmarksUseCase.execute(),
+  async (sort: BookmarkSort) => getArchivedBookmarksUseCase.execute(sort),
   BOOKMARK_CACHE_KEYS.archivedBookmarks,
   {
     revalidate: TEN_MINUTES_IN_SECONDS,
@@ -34,8 +37,8 @@ const getArchivedBookmarksCached = unstable_cache(
 )
 
 const getBookmarksByTagsCached = unstable_cache(
-  async (tags: string[]) => {
-    return getBookmarksByTagsUseCase.execute(tags)
+  async (tags: string[], sort: BookmarkSort) => {
+    return getBookmarksByTagsUseCase.execute(tags, sort)
   },
   BOOKMARK_CACHE_KEYS.bookmarksByTags,
   {
@@ -53,21 +56,26 @@ const getTagsCached = unstable_cache(
   },
 )
 
-export const getCachedBookmarks = (tags: string[]) => {
+export const getCachedBookmarks = (
+  tags: string[],
+  sort: BookmarkSort = DEFAULT_BOOKMARK_SORT,
+) => {
   const normalizedTags = normalizeTags(tags)
   const isNormalizedTagsEmpty = normalizedTags.length === 0
 
   if (isNormalizedTagsEmpty) {
-    return getBookmarksCached()
+    return getBookmarksCached(sort)
   }
 
-  return getBookmarksByTagsCached(normalizedTags)
+  return getBookmarksByTagsCached(normalizedTags, sort)
 }
 
 export const getCachedTags = () => {
   return getTagsCached()
 }
 
-export const getCachedArchivedBookmarks = () => {
-  return getArchivedBookmarksCached()
+export const getCachedArchivedBookmarks = (
+  sort: BookmarkSort = DEFAULT_BOOKMARK_SORT,
+) => {
+  return getArchivedBookmarksCached(sort)
 }

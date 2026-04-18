@@ -1,17 +1,21 @@
 import { useCallback } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import { BOOKMARK_TAG_SEPARATOR } from '@/core/constants/bookmark'
 import { normalizeTags, parseTagsParam } from '@/features/bookmarks/utils/tags'
 
 export const useTagFilter = () => {
   const router = useRouter()
+  const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const buildUrl = useCallback((params: URLSearchParams) => {
-    const query = params.toString()
-    return query ? `/?${query}` : '/'
-  }, [])
+  const buildUrl = useCallback(
+    (params: URLSearchParams) => {
+      const query = params.toString()
+      return query ? `${pathname}?${query}` : pathname
+    },
+    [pathname],
+  )
 
   const onToggleTag = useCallback(
     (tagName: string) => {

@@ -1,5 +1,6 @@
-import type {
+import {
   Bookmark,
+  BookmarkSort,
   NewBookmark,
   Tag,
   UpdateBookmark,
@@ -7,7 +8,7 @@ import type {
 
 import type { BookmarkRepository } from '@/core/domain/repositories/bookmark.repository'
 
-import { NotionService } from './notion.service'
+import { NotionService, type QueryPagesParams } from './notion.service'
 
 import {
   mapNewBookmarkToNotionProperties,
@@ -21,7 +22,7 @@ import { NOTION_PROPERTIES } from './constants'
 export class NotionBookmarkRepository implements BookmarkRepository {
   constructor(private notionService: NotionService) {}
 
-  async getAll(): Promise<Bookmark[]> {
+  async getAll(sort: BookmarkSort): Promise<Bookmark[]> {
     const dataSourceId = await this.notionService.getPrimaryDataSourceId()
 
     const rows = await this.notionService.queryPages(dataSourceId, {
@@ -29,10 +30,7 @@ export class NotionBookmarkRepository implements BookmarkRepository {
         property: NOTION_PROPERTIES.Archived,
         checkbox: { equals: false },
       },
-      sorts: [
-        { property: NOTION_PROPERTIES.Pinned, direction: 'descending' },
-        { property: NOTION_PROPERTIES.CreatedTime, direction: 'descending' },
-      ],
+      sorts: this.resolveSorts(sort),
       page_size: BOOKMARKS_PAGE_SIZE,
       result_type: 'page',
     })
@@ -40,8 +38,11 @@ export class NotionBookmarkRepository implements BookmarkRepository {
     return mapNotionRowsToBookmarks(rows)
   }
 
-  async getByTags(tags: string[]): Promise<Bookmark[]> {
-    const rows = await this.notionService.queryBookmarksByTags(tags)
+  async getByTags(tags: string[], sort: BookmarkSort): Promise<Bookmark[]> {
+    const rows = await this.notionService.queryBookmarksByTags(
+      tags,
+      this.resolveSorts(sort),
+    )
     return mapNotionRowsToBookmarks(rows)
   }
 
@@ -49,7 +50,7 @@ export class NotionBookmarkRepository implements BookmarkRepository {
     return this.notionService.getTagsWithCounts()
   }
 
-  async getArchived(): Promise<Bookmark[]> {
+  async getArchived(sort: BookmarkSort): Promise<Bookmark[]> {
     const dataSourceId = await this.notionService.getPrimaryDataSourceId()
 
     const rows = await this.notionService.queryPages(dataSourceId, {
@@ -57,9 +58,7 @@ export class NotionBookmarkRepository implements BookmarkRepository {
         property: NOTION_PROPERTIES.Archived,
         checkbox: { equals: true },
       },
-      sorts: [
-        { property: NOTION_PROPERTIES.CreatedTime, direction: 'descending' },
-      ],
+      sorts: this.resolveSorts(sort),
       page_size: BOOKMARKS_PAGE_SIZE,
       result_type: 'page',
     })
@@ -116,5 +115,33 @@ export class NotionBookmarkRepository implements BookmarkRepository {
 
   async delete(bookmarkId: string): Promise<void> {
     await this.notionService.deletePage(bookmarkId)
+  }
+
+  private resolveSorts(sort: BookmarkSort): QueryPagesParams['sorts'] {
+    const pinSort = {
+      property: NOTION_PROPERTIES.Pinned,
+      direction: 'descending' as const,
+    }
+    const createdTimeSort = {
+      property: NOTION_PROPERTIES.CreatedTime,
+      direction: 'descending' as const,
+    }
+
+    const sortsByBookmarkSort: Record<BookmarkSort, QueryPagesParams['sorts']> =
+      {
+        [BookmarkSort.RecentlyAdded]: [pinSort, createdTimeSort],
+        [BookmarkSort.RecentlyVisited]: [
+          pinSort,
+          { property: NOTION_PROPERTIES.LastVisited, direction: 'descending' },
+          createdTimeSort,
+        ],
+        [BookmarkSort.MostVisited]: [
+          pinSort,
+          { property: NOTION_PROPERTIES.VisitCount, direction: 'descending' },
+          createdTimeSort,
+        ],
+      }
+
+    return sortsByBookmarkSort[sort]
   }
 }
