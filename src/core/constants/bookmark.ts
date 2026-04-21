@@ -6,6 +6,8 @@ export const BOOKMARK_DESCRIPTION_MAX_LENGTH = 280 as const
 export const TEN_MINUTES_IN_SECONDS = 600 as const
 export const THIRTY_MINUTES_IN_SECONDS = 1800 as const
 
+export const SEARCH_SUGGESTIONS_PAGE_SIZE = 10 as const
+
 export const BOOKMARK_CACHE_KEYS = {
   allBookmarks: ['bookmarks', 'all'],
   bookmarksByTags: ['bookmarks', 'by-tags'],

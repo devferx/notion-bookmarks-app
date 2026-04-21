@@ -7,8 +7,10 @@ import {
   GetArchivedBookmarksUseCase,
   GetBookmarksByTagsUseCase,
   GetBookmarksUseCase,
+  GetSearchSuggestionsUseCase,
   GetTagsUseCase,
   PinBookmarkUseCase,
+  SearchBookmarksUseCase,
   TrackBookmarkVisitUseCase,
   UpdateBookmarkArchiveStatusUseCase,
   UpdateBookmarkUseCase,
@@ -31,5 +33,9 @@ export const getArchivedBookmarksUseCase = new GetArchivedBookmarksUseCase(
   bookmarkRepo,
 )
 export const getBookmarksByTagsUseCase = new GetBookmarksByTagsUseCase(
+  bookmarkRepo,
+)
+export const searchBookmarksUseCase = new SearchBookmarksUseCase(bookmarkRepo)
+export const getSearchSuggestionsUseCase = new GetSearchSuggestionsUseCase(
   bookmarkRepo,
 )

@@ -50,6 +50,15 @@ export class NotionBookmarkRepository implements BookmarkRepository {
     return this.notionService.getTagsWithCounts()
   }
 
+  async getSearchSuggestions(query: string): Promise<string[]> {
+    return this.notionService.getTitleSuggestions(query)
+  }
+
+  async searchByQuery(query: string): Promise<Bookmark[]> {
+    const rows = await this.notionService.searchByQuery(query)
+    return mapNotionRowsToBookmarks(rows)
+  }
+
   async getArchived(sort: BookmarkSort): Promise<Bookmark[]> {
     const dataSourceId = await this.notionService.getPrimaryDataSourceId()
 

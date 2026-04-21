@@ -9,8 +9,15 @@ import {
 import type { Tag } from '@/core/domain/models'
 
 import { computeTagCounts } from '@/core/infrastructure/notion/mappers'
+import {
+  extractRichText,
+  isNotionPageRow,
+} from '@/core/infrastructure/notion/utils/notion-parsing.utils'
 
-import { BOOKMARKS_PAGE_SIZE } from '@/core/constants/bookmark'
+import {
+  BOOKMARKS_PAGE_SIZE,
+  SEARCH_SUGGESTIONS_PAGE_SIZE,
+} from '@/core/constants/bookmark'
 import { NOTION_PROPERTIES } from '@/core/infrastructure/notion/constants'
 
 export type UpdatePageProperties = NonNullable<
@@ -211,6 +218,76 @@ export class NotionService {
       .map((name) => ({ name, count: counts.get(name) ?? 0 }))
       .filter((tag) => tag.count > 0)
       .sort((a, b) => b.count - a.count)
+  }
+
+  async searchByQuery(query: string): Promise<QueryDataSourceResponse> {
+    const dataSourceId = await this.getPrimaryDataSourceId()
+
+    const searchFilters = [
+      {
+        property: NOTION_PROPERTIES.Title,
+        rich_text: { contains: query },
+      },
+      {
+        property: NOTION_PROPERTIES.URL,
+        text: { contains: query },
+      },
+      {
+        property: NOTION_PROPERTIES.Description,
+        rich_text: { contains: query },
+      },
+    ]
+
+    const archivedFilter = {
+      property: NOTION_PROPERTIES.Archived,
+      checkbox: { equals: false },
+    }
+
+    const filter = {
+      and: [archivedFilter, { or: searchFilters }],
+    }
+
+    return this.queryPages(dataSourceId, {
+      filter: filter as unknown as QueryPagesParams['filter'],
+      page_size: BOOKMARKS_PAGE_SIZE,
+      result_type: 'page',
+    })
+  }
+
+  async getSearchSuggestions(query: string): Promise<string[]> {
+    const normalizedQuery = query.trim()
+
+    if (!normalizedQuery) {
+      return []
+    }
+
+    const dataSourceId = await this.getPrimaryDataSourceId()
+
+    const filter = {
+      and: [
+        {
+          property: NOTION_PROPERTIES.Archived,
+          checkbox: { equals: false },
+        },
+        {
+          property: NOTION_PROPERTIES.Title,
+          title: { contains: normalizedQuery },
+        },
+      ],
+    }
+
+    const response = await this.queryPages(dataSourceId, {
+      filter: filter as unknown as QueryPagesParams['filter'],
+      page_size: SEARCH_SUGGESTIONS_PAGE_SIZE,
+      result_type: 'page',
+    })
+
+    const titles = response.results
+      .filter(isNotionPageRow)
+      .map((row) => extractRichText(row.properties.Title?.title) || '')
+      .filter(Boolean)
+
+    return [...new Set(titles)]
   }
 
   async deletePage(pageId: string): Promise<UpdatePageResponse> {
