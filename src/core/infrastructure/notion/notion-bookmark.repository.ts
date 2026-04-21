@@ -51,7 +51,7 @@ export class NotionBookmarkRepository implements BookmarkRepository {
   }
 
   async getSearchSuggestions(query: string): Promise<string[]> {
-    return this.notionService.getTitleSuggestions(query)
+    return this.notionService.getSearchSuggestions(query)
   }
 
   async searchByQuery(query: string): Promise<Bookmark[]> {
