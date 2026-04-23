@@ -32,6 +32,12 @@ export type QueryPagesParams = Omit<
   'data_source_id'
 >
 
+type SearchByQueryParams = {
+  isArchived?: boolean
+  sorts?: QueryPagesParams['sorts']
+  tags?: string[]
+}
+
 export class NotionService {
   private client: Client
 
@@ -220,17 +226,20 @@ export class NotionService {
       .sort((a, b) => b.count - a.count)
   }
 
-  async searchByQuery(query: string): Promise<QueryDataSourceResponse> {
+  async searchByQuery(
+    query: string,
+    params: SearchByQueryParams = {},
+  ): Promise<QueryDataSourceResponse> {
     const dataSourceId = await this.getPrimaryDataSourceId()
 
     const searchFilters = [
       {
         property: NOTION_PROPERTIES.Title,
-        rich_text: { contains: query },
+        title: { contains: query },
       },
       {
         property: NOTION_PROPERTIES.URL,
-        text: { contains: query },
+        url: { contains: query },
       },
       {
         property: NOTION_PROPERTIES.Description,
@@ -238,17 +247,44 @@ export class NotionService {
       },
     ]
 
+    const normalizedTags = [
+      ...new Set((params.tags ?? []).map((tag) => tag.trim()).filter(Boolean)),
+    ]
+
     const archivedFilter = {
       property: NOTION_PROPERTIES.Archived,
-      checkbox: { equals: false },
+      checkbox: { equals: params.isArchived ?? false },
     }
 
-    const filter = {
-      and: [archivedFilter, { or: searchFilters }],
+    const tagFilter =
+      normalizedTags.length === 0
+        ? undefined
+        : normalizedTags.length === 1
+          ? {
+              property: NOTION_PROPERTIES.Tags,
+              multi_select: { contains: normalizedTags[0] },
+            }
+          : {
+              or: normalizedTags.map((tag) => ({
+                property: NOTION_PROPERTIES.Tags,
+                multi_select: { contains: tag },
+              })),
+            }
+
+    const filterItems: Array<Record<string, unknown>> = [
+      archivedFilter,
+      { or: searchFilters },
+    ]
+
+    if (tagFilter) {
+      filterItems.push(tagFilter)
     }
+
+    const filter = { and: filterItems }
 
     return this.queryPages(dataSourceId, {
       filter: filter as unknown as QueryPagesParams['filter'],
+      sorts: params.sorts,
       page_size: BOOKMARKS_PAGE_SIZE,
       result_type: 'page',
     })

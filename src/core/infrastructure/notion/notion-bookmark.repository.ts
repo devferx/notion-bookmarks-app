@@ -2,6 +2,7 @@ import {
   Bookmark,
   BookmarkSort,
   NewBookmark,
+  SearchBookmarksOptions,
   Tag,
   UpdateBookmark,
 } from '@/core/domain/models'
@@ -54,8 +55,16 @@ export class NotionBookmarkRepository implements BookmarkRepository {
     return this.notionService.getSearchSuggestions(query)
   }
 
-  async searchByQuery(query: string): Promise<Bookmark[]> {
-    const rows = await this.notionService.searchByQuery(query)
+  async searchByQuery(
+    query: string,
+    options?: SearchBookmarksOptions,
+  ): Promise<Bookmark[]> {
+    const rows = await this.notionService.searchByQuery(query, {
+      isArchived: options?.isArchived,
+      sorts: options?.sort ? this.resolveSorts(options.sort) : undefined,
+      tags: options?.tags,
+    })
+
     return mapNotionRowsToBookmarks(rows)
   }
 

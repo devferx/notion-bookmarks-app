@@ -11,6 +11,7 @@ export const SEARCH_SUGGESTIONS_PAGE_SIZE = 10 as const
 export const BOOKMARK_CACHE_KEYS = {
   allBookmarks: ['bookmarks', 'all'],
   bookmarksByTags: ['bookmarks', 'by-tags'],
+  searchedBookmarks: ['bookmarks', 'search'],
   archivedBookmarks: ['bookmarks', 'archived'],
   allTags: ['bookmarks', 'all-tags'],
 }
