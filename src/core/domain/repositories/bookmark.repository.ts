@@ -11,7 +11,6 @@ export interface BookmarkRepository {
   getAll(sort: BookmarkSort): Promise<Bookmark[]>
   getArchived(sort: BookmarkSort): Promise<Bookmark[]>
   getByTags(tags: string[], sort: BookmarkSort): Promise<Bookmark[]>
-  getSearchSuggestions(query: string): Promise<string[]>
   searchByQuery(
     query: string,
     options?: SearchBookmarksOptions,

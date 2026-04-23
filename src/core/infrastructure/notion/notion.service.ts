@@ -290,42 +290,6 @@ export class NotionService {
     })
   }
 
-  async getSearchSuggestions(query: string): Promise<string[]> {
-    const normalizedQuery = query.trim()
-
-    if (!normalizedQuery) {
-      return []
-    }
-
-    const dataSourceId = await this.getPrimaryDataSourceId()
-
-    const filter = {
-      and: [
-        {
-          property: NOTION_PROPERTIES.Archived,
-          checkbox: { equals: false },
-        },
-        {
-          property: NOTION_PROPERTIES.Title,
-          title: { contains: normalizedQuery },
-        },
-      ],
-    }
-
-    const response = await this.queryPages(dataSourceId, {
-      filter: filter as unknown as QueryPagesParams['filter'],
-      page_size: SEARCH_SUGGESTIONS_PAGE_SIZE,
-      result_type: 'page',
-    })
-
-    const titles = response.results
-      .filter(isNotionPageRow)
-      .map((row) => extractRichText(row.properties.Title?.title) || '')
-      .filter(Boolean)
-
-    return [...new Set(titles)]
-  }
-
   async deletePage(pageId: string): Promise<UpdatePageResponse> {
     return this.client.pages.update({
       page_id: pageId,
