@@ -6,6 +6,7 @@ import { UserMenu } from '@/components/ui/user-menu'
 import { getCachedTags } from '@/features/bookmarks/cache/bookmark-cache'
 import {
   CreateBookmarkDialog,
+  SearchBookmarksInput,
   TagFilterSelector,
 } from '@/features/bookmarks/components'
 import { SidebarNavMenu } from '@/features/navigation/components'
@@ -29,12 +30,7 @@ export default async function BookmarksLayout({ children }: Props) {
           <div className="flex items-center justify-start gap-2.5">
             <MenuButton />
 
-            <input
-              className="text-preset-4-medium bg-search-input dark:text-neutral-0 text-input-shadow w-full max-w-80 rounded-lg border border-neutral-300 bg-no-repeat py-2.5 pr-3 pl-10 text-neutral-800 md:min-w-80 dark:border-neutral-500 dark:placeholder:text-neutral-100"
-              placeholder="Search by title..."
-              aria-label="Search bookmarks"
-              type="text"
-            />
+            <SearchBookmarksInput />
           </div>
 
           <div className="flex items-center gap-2.5">
