@@ -1,4 +1,5 @@
 export * from './use-bookmark-sort'
+export * from './use-bookmark-search'
 export * from './use-create-bookmark'
 export * from './use-edit-bookmark'
 export * from './use-tag-filter'

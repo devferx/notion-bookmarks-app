@@ -6,6 +6,7 @@ import {
   getArchivedBookmarksUseCase,
   getBookmarksByTagsUseCase,
   getBookmarksUseCase,
+  searchBookmarksUseCase,
   getTagsUseCase,
 } from '@/core/container'
 import {
@@ -56,6 +57,29 @@ const getTagsCached = unstable_cache(
   },
 )
 
+const getSearchedBookmarksCached = unstable_cache(
+  async (
+    query: string,
+    sort: BookmarkSort,
+    tags: string[],
+    isArchived: boolean,
+  ) => {
+    return searchBookmarksUseCase.execute(query, {
+      sort,
+      tags,
+      isArchived,
+    })
+  },
+  BOOKMARK_CACHE_KEYS.searchedBookmarks,
+  {
+    revalidate: TEN_MINUTES_IN_SECONDS,
+    tags: [
+      BOOKMARK_CACHE_TAGS.bookmarksList,
+      BOOKMARK_CACHE_TAGS.archivedBookmarksList,
+    ],
+  },
+)
+
 export const getCachedBookmarks = (
   tags: string[],
   sort: BookmarkSort = DEFAULT_BOOKMARK_SORT,
@@ -78,4 +102,32 @@ export const getCachedArchivedBookmarks = (
   sort: BookmarkSort = DEFAULT_BOOKMARK_SORT,
 ) => {
   return getArchivedBookmarksCached(sort)
+}
+
+export const getCachedSearchedBookmarks = (
+  query: string,
+  {
+    sort = DEFAULT_BOOKMARK_SORT,
+    tags = [],
+    isArchived = false,
+  }: {
+    sort?: BookmarkSort
+    tags?: string[]
+    isArchived?: boolean
+  } = {},
+) => {
+  const normalizedQuery = query.trim()
+
+  if (!normalizedQuery) {
+    return isArchived
+      ? getCachedArchivedBookmarks(sort)
+      : getCachedBookmarks(tags, sort)
+  }
+
+  return getSearchedBookmarksCached(
+    normalizedQuery,
+    sort,
+    normalizeTags(tags),
+    isArchived,
+  )
 }

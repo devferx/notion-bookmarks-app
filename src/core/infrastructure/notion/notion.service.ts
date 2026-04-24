@@ -9,8 +9,15 @@ import {
 import type { Tag } from '@/core/domain/models'
 
 import { computeTagCounts } from '@/core/infrastructure/notion/mappers'
+import {
+  extractRichText,
+  isNotionPageRow,
+} from '@/core/infrastructure/notion/utils/notion-parsing.utils'
 
-import { BOOKMARKS_PAGE_SIZE } from '@/core/constants/bookmark'
+import {
+  BOOKMARKS_PAGE_SIZE,
+  SEARCH_SUGGESTIONS_PAGE_SIZE,
+} from '@/core/constants/bookmark'
 import { NOTION_PROPERTIES } from '@/core/infrastructure/notion/constants'
 
 export type UpdatePageProperties = NonNullable<
@@ -24,6 +31,12 @@ export type QueryPagesParams = Omit<
   Parameters<Client['dataSources']['query']>[0],
   'data_source_id'
 >
+
+type SearchByQueryParams = {
+  isArchived?: boolean
+  sorts?: QueryPagesParams['sorts']
+  tags?: string[]
+}
 
 export class NotionService {
   private client: Client
@@ -211,6 +224,70 @@ export class NotionService {
       .map((name) => ({ name, count: counts.get(name) ?? 0 }))
       .filter((tag) => tag.count > 0)
       .sort((a, b) => b.count - a.count)
+  }
+
+  async searchByQuery(
+    query: string,
+    params: SearchByQueryParams = {},
+  ): Promise<QueryDataSourceResponse> {
+    const dataSourceId = await this.getPrimaryDataSourceId()
+
+    const searchFilters = [
+      {
+        property: NOTION_PROPERTIES.Title,
+        title: { contains: query },
+      },
+      {
+        property: NOTION_PROPERTIES.URL,
+        url: { contains: query },
+      },
+      {
+        property: NOTION_PROPERTIES.Description,
+        rich_text: { contains: query },
+      },
+    ]
+
+    const normalizedTags = [
+      ...new Set((params.tags ?? []).map((tag) => tag.trim()).filter(Boolean)),
+    ]
+
+    const archivedFilter = {
+      property: NOTION_PROPERTIES.Archived,
+      checkbox: { equals: params.isArchived ?? false },
+    }
+
+    const tagFilter =
+      normalizedTags.length === 0
+        ? undefined
+        : normalizedTags.length === 1
+          ? {
+              property: NOTION_PROPERTIES.Tags,
+              multi_select: { contains: normalizedTags[0] },
+            }
+          : {
+              or: normalizedTags.map((tag) => ({
+                property: NOTION_PROPERTIES.Tags,
+                multi_select: { contains: tag },
+              })),
+            }
+
+    const filterItems: Array<Record<string, unknown>> = [
+      archivedFilter,
+      { or: searchFilters },
+    ]
+
+    if (tagFilter) {
+      filterItems.push(tagFilter)
+    }
+
+    const filter = { and: filterItems }
+
+    return this.queryPages(dataSourceId, {
+      filter: filter as unknown as QueryPagesParams['filter'],
+      sorts: params.sorts,
+      page_size: BOOKMARKS_PAGE_SIZE,
+      result_type: 'page',
+    })
   }
 
   async deletePage(pageId: string): Promise<UpdatePageResponse> {

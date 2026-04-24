@@ -1,5 +1,6 @@
-export * from './bookmark'
 export * from './bookmark-sort'
+export * from './bookmark'
 export * from './new-bookmark'
+export * from './search-bookmark-options'
 export * from './tag'
 export * from './update-bookmark'
