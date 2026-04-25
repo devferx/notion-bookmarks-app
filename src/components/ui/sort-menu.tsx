@@ -21,7 +21,7 @@ export const SortMenu = () => {
   return (
     <div className="relative" ref={containerRef}>
       <button
-        className="bg-neutral-0 flex cursor-pointer items-center gap-1 rounded-lg border border-neutral-400 px-3 py-2.5"
+        className="bg-neutral-0 flex cursor-pointer items-center gap-1 rounded-lg border border-neutral-400 px-3 py-2.5 dark:bg-neutral-800"
         type="button"
         ref={triggerRef}
         onClick={onToggleMenu}
@@ -30,8 +30,10 @@ export const SortMenu = () => {
         aria-expanded={isOpen}
         aria-controls={menuId}
       >
-        <SwitchVertical className="text-neutral-900" />
-        <span className="px-0.5">Sort by</span>
+        <SwitchVertical className="dark:text-neutral-0 text-neutral-900" />
+        <span className="dark:text-neutral-0 px-0.5 text-neutral-900">
+          Sort by
+        </span>
       </button>
 
       {isOpen && (
@@ -46,16 +48,16 @@ export const SortMenu = () => {
           {sortOptions.map((option) => (
             <button
               key={option.value}
-              className="flex cursor-pointer items-center gap-2.5 rounded-lg p-2 transition-colors duration-500 hover:bg-neutral-100"
+              className="flex cursor-pointer items-center gap-2.5 rounded-lg p-2 transition-colors duration-500 hover:bg-neutral-100 dark:hover:bg-neutral-500"
               role="menuitem"
               tabIndex={0}
               onClick={() => onSelectSort(option.value)}
             >
-              <span className="text-preset-4 flex-1 text-start text-neutral-800">
+              <span className="text-preset-4 flex-1 text-start text-neutral-800 dark:text-neutral-100">
                 {option.label}
               </span>
               {selectedSort === option.value && (
-                <Check className="text-neutral-800" />
+                <Check className="text-neutral-800 dark:text-neutral-100" />
               )}
             </button>
           ))}
