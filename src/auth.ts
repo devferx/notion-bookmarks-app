@@ -5,7 +5,7 @@ import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { ZodError } from 'zod'
 
-import { signInSchema } from '@/features/auth/schemas/auth.schema'
+import { signInSchema } from '@/features/auth/schemas'
 
 const supabaseUrl = process.env.SUPABASE_URL
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
