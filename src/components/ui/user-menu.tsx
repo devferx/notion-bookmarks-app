@@ -1,7 +1,6 @@
 'use client'
 
 import { useId } from 'react'
-import { useSession } from 'next-auth/react'
 
 import { signOutAction } from '@/actions/auth'
 
@@ -13,8 +12,12 @@ import { Logout, Palette } from '../icons'
 
 import { getGravatarUrl } from '@/core/utils'
 
-export const UserMenu = () => {
-  const { data: session } = useSession()
+type Props = {
+  name: string
+  email: string
+}
+
+export const UserMenu = ({ name: userName, email: userEmail }: Props) => {
   const { isOpen, containerRef, menuRef, triggerRef, menuId, onToggleMenu } =
     useMenu<HTMLDivElement>({ closeOnFocusOut: true })
 
@@ -22,8 +25,6 @@ export const UserMenu = () => {
   const themeToggleId = useId()
   const themeToggleLabelId = useId()
 
-  const userName = session?.user?.name ?? ''
-  const userEmail = session?.user?.email ?? ''
   const userImage = userEmail ? getGravatarUrl(userEmail) : '/avatar.png'
 
   return (

@@ -3,7 +3,7 @@
 import { createClient } from '@supabase/supabase-js'
 import bcrypt from 'bcryptjs'
 import { AuthError } from 'next-auth'
-import { signIn, signOut } from '@/auth'
+import { auth, signIn, signOut } from '@/auth'
 import { signUpSchema } from '@/features/auth/schemas/sign-up.schema'
 
 export type AuthActionResult =
@@ -103,4 +103,13 @@ export const signUpAction = async (
 
 export const signOutAction = async (): Promise<void> => {
   await signOut({ redirectTo: '/sign-in' })
+}
+
+export const getUserInfo = async () => {
+  const session = await auth()
+
+  return {
+    name: session?.user?.name ?? '',
+    email: session?.user?.email ?? '',
+  }
 }
