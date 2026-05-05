@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { signUpAction } from '@/actions/auth'
+import { FormField } from '@/features/auth/components/form-field'
 import {
   signUpSchema,
   type SignUpValues,
@@ -38,71 +39,32 @@ export const SignUpForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
-      <div className="grid gap-1.5">
-        <label
-          className="text-preset-4 dark:text-neutral-0 text-neutral-900"
-          htmlFor="fullname"
-        >
-          Full name
-          <span className="text-teal-70 dark:text-neutral-100">*</span>
-        </label>
-        <input
-          className="bg-neutral-0 text-input-shadow rounded-lg border border-neutral-500 p-3 dark:border-neutral-300 dark:bg-neutral-600"
-          type="text"
-          id="fullname"
-          aria-invalid={Boolean(errors.fullname)}
-          {...register('fullname')}
-        />
-        {errors.fullname?.message && (
-          <span className="text-preset-5 text-red-600">
-            {errors.fullname.message}
-          </span>
-        )}
-      </div>
+      <FormField
+        id="fullname"
+        label="Full name"
+        type="text"
+        required
+        error={errors.fullname?.message}
+        registration={register('fullname')}
+      />
 
-      <div className="grid gap-1.5">
-        <label
-          className="text-preset-4 dark:text-neutral-0 text-neutral-900"
-          htmlFor="email"
-        >
-          Email address
-          <span className="text-teal-70 dark:text-neutral-100">*</span>
-        </label>
-        <input
-          className="bg-neutral-0 text-input-shadow rounded-lg border border-neutral-500 p-3 dark:border-neutral-300 dark:bg-neutral-600"
-          type="email"
-          id="email"
-          aria-invalid={Boolean(errors.email)}
-          {...register('email')}
-        />
-        {errors.email?.message && (
-          <span className="text-preset-5 text-red-600">
-            {errors.email.message}
-          </span>
-        )}
-      </div>
+      <FormField
+        id="email"
+        label="Email address"
+        type="email"
+        required
+        error={errors.email?.message}
+        registration={register('email')}
+      />
 
-      <div className="grid gap-1.5">
-        <label
-          className="text-preset-4 dark:text-neutral-0 text-neutral-900"
-          htmlFor="password"
-        >
-          Password
-          <span className="text-teal-70 dark:text-neutral-100">*</span>
-        </label>
-        <input
-          className="bg-neutral-0 text-input-shadow rounded-lg border border-neutral-500 p-3 dark:border-neutral-300 dark:bg-neutral-600"
-          type="password"
-          id="password"
-          aria-invalid={Boolean(errors.password)}
-          {...register('password')}
-        />
-        {errors.password?.message && (
-          <span className="text-preset-5 text-red-600">
-            {errors.password.message}
-          </span>
-        )}
-      </div>
+      <FormField
+        id="password"
+        label="Password"
+        type="password"
+        required
+        error={errors.password?.message}
+        registration={register('password')}
+      />
 
       <button
         className="button-shadow text-preset-3 text-neutral-0 cursor-pointer rounded-lg bg-teal-700 px-4 py-3 disabled:opacity-60"
