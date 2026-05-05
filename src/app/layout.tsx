@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider } from 'next-themes'
 import { Manrope, Roboto } from 'next/font/google'
 import { Toaster } from 'sonner'
@@ -32,7 +33,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${manrope.variable} ${roboto.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <StoreProvider>{children}</StoreProvider>
+          <SessionProvider>
+            <StoreProvider>{children}</StoreProvider>
+          </SessionProvider>
           <Toaster position="top-right" />
         </ThemeProvider>
       </body>

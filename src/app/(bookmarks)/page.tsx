@@ -1,8 +1,11 @@
+import { redirect } from 'next/navigation'
+
 import {
   getCachedBookmarks,
   getCachedSearchedBookmarks,
 } from '@/features/bookmarks/cache/bookmark-cache'
 
+import { auth } from '@/auth'
 import { SortMenu } from '@/components/ui/sort-menu'
 import { BookmarkCard } from '@/features/bookmarks/components'
 
@@ -15,6 +18,9 @@ interface HomeProps {
 }
 
 export default async function Home({ searchParams }: HomeProps) {
+  const session = await auth()
+  if (!session?.user) redirect('/sign-in')
+
   const {
     tags: tagsParam,
     sort: sortParam,
