@@ -3,6 +3,7 @@
 import { createClient } from '@supabase/supabase-js'
 import bcrypt from 'bcryptjs'
 import { AuthError } from 'next-auth'
+
 import { auth, signIn, signOut } from '@/auth'
 import { signUpSchema } from '@/features/auth/schemas/sign-up.schema'
 
