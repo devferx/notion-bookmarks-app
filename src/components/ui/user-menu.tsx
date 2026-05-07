@@ -2,19 +2,30 @@
 
 import { useId } from 'react'
 
+import { signOutAction } from '@/actions/auth'
+
 import { useMenu } from '@/hooks/use-menu'
 
 import { ThemeToggleButton } from './theme-toggle'
 
 import { Logout, Palette } from '../icons'
 
-export const UserMenu = () => {
+import { getGravatarUrl } from '@/core/utils'
+
+type Props = {
+  name: string
+  email: string
+}
+
+export const UserMenu = ({ name: userName, email: userEmail }: Props) => {
   const { isOpen, containerRef, menuRef, triggerRef, menuId, onToggleMenu } =
     useMenu<HTMLDivElement>({ closeOnFocusOut: true })
 
   const menuTitleId = useId()
   const themeToggleId = useId()
   const themeToggleLabelId = useId()
+
+  const userImage = userEmail ? getGravatarUrl(userEmail) : '/avatar.png'
 
   return (
     <div className="relative h-10 w-10" ref={containerRef}>
@@ -31,7 +42,7 @@ export const UserMenu = () => {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className="aspect-square h-full w-full rounded-full object-cover"
-          src="/avatar.png"
+          src={userImage}
           alt="User avatar"
         />
       </button>
@@ -53,17 +64,17 @@ export const UserMenu = () => {
           <div className="flex gap-3 border-b border-neutral-200 px-4 py-3 dark:border-neutral-500">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              className="aspect-square min-w-10 rounded-full object-cover"
-              src="/avatar.png"
+              className="aspect-square max-w-10 min-w-10 rounded-full object-cover"
+              src={userImage}
               alt="User avatar"
             />
 
             <div>
               <p className="text-preset-4 dark:text-neutral-0 text-neutral-900">
-                Emily Carter
+                {userName}
               </p>
               <p className="text-preset-4-medium text-neutral-800 dark:text-neutral-100">
-                emily101@gmail.com
+                {userEmail}
               </p>
             </div>
           </div>
@@ -99,6 +110,7 @@ export const UserMenu = () => {
               type="button"
               aria-label="Logout"
               role="menuitem"
+              onClick={() => signOutAction()}
             >
               <Logout className="text-neutral-800 dark:text-neutral-100" />
               <span className="text-preset-4 text-neutral-800 dark:text-neutral-100">

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 
+import { auth } from '@/auth'
 import { MenuButton } from '@/components/ui/menu-button'
 import { Sidebar } from '@/components/ui/sidebar'
 import { UserMenu } from '@/components/ui/user-menu'
@@ -10,13 +11,16 @@ import {
   TagFilterSelector,
 } from '@/features/bookmarks/components'
 import { SidebarNavMenu } from '@/features/navigation/components'
+import { getUserInfo } from '@/actions/auth'
 
 type Props = {
   children: ReactNode
 }
 
 export default async function BookmarksLayout({ children }: Props) {
-  const tags = await getCachedTags()
+  const [tags, userInfo] = await Promise.all([getCachedTags(), getUserInfo()])
+
+  const { name, email } = userInfo
 
   return (
     <main className="flex min-h-screen w-full bg-neutral-100 dark:bg-neutral-900">
@@ -36,7 +40,7 @@ export default async function BookmarksLayout({ children }: Props) {
           <div className="flex items-center gap-2.5">
             <CreateBookmarkDialog />
 
-            <UserMenu />
+            <UserMenu name={name} email={email} />
           </div>
         </header>
 

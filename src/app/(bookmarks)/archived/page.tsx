@@ -1,8 +1,11 @@
+import { redirect } from 'next/navigation'
+
 import {
   getCachedArchivedBookmarks,
   getCachedSearchedBookmarks,
 } from '@/features/bookmarks/cache/bookmark-cache'
 
+import { auth } from '@/auth'
 import { SortMenu } from '@/components/ui/sort-menu'
 import { BookmarkCard } from '@/features/bookmarks/components'
 
@@ -16,6 +19,9 @@ interface ArchivedBookmarksPageProps {
 export default async function ArchivedBookmarksPage({
   searchParams,
 }: ArchivedBookmarksPageProps) {
+  const session = await auth()
+  if (!session?.user) redirect('/sign-in')
+
   const { sort: sortParam, query: queryParam } = await searchParams
 
   const selectedSort = parseBookmarkSort(sortParam)
